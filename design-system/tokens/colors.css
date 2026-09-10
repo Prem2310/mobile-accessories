@@ -1,0 +1,26 @@
+:root{
+  /* Brand — sampled from the shop signage logo */
+  --navy-900:#061738;--navy-800:#0a2153;--navy-700:#132d68;--navy-600:#1d3c82;--navy-500:#2b4fa0;
+  --navy-200:#c3ceE6;--navy-100:#e3e9f5;--navy-50:#f2f5fb;
+  --orange-700:#b34a00;--orange-600:#d55b00;--orange-500:#f26a00;--orange-400:#ff8425;
+  --orange-200:#ffd0aa;--orange-100:#ffe9d8;--orange-50:#fff5ee;
+  /* Neutrals */
+  --white:#ffffff;--ink-900:#111726;--ink-700:#394052;--gray-800:#2a3245;--gray-600:#59617a;
+  --gray-400:#98a0b5;--gray-300:#c9cfdd;--gray-200:#e4e8f0;--gray-100:#f1f3f8;--gray-50:#f8f9fc;
+  /* Semantic status */
+  --green-600:#128c4b;--green-100:#e2f6ea;
+  --red-600:#c8281f;--red-100:#fdeae8;
+  --amber-600:#c98a00;--amber-100:#fdf3dd;
+  --whatsapp:#25d366;--whatsapp-dark:#128c7e;--instagram:#c13584;
+
+  /* Semantic aliases */
+  --brand:var(--orange-500);--brand-ink:var(--navy-800);
+  --text-strong:var(--navy-800);--text-body:var(--gray-800);--text-muted:var(--gray-600);
+  --text-faint:var(--gray-400);--text-on-brand:var(--white);--text-on-dark:var(--white);
+  --text-link:var(--orange-600);--text-link-hover:var(--orange-700);
+  --surface-page:var(--gray-50);--surface-card:var(--white);--surface-sunken:var(--gray-100);
+  --surface-dark:var(--navy-800);--surface-dark-alt:var(--navy-900);--surface-accent:var(--orange-50);
+  --border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--navy-800);
+  --border-brand:var(--orange-500);
+  --price:var(--navy-800);--price-strike:var(--gray-400);--save:var(--green-600);
+}

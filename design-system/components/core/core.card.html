@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Core — buttons, cards, badges" subtitle="Pill buttons, icon buttons, badges, filter tags, section headings" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{background:var(--surface-page);padding:20px;font:var(--type-body)}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const {Button,IconButton,Badge,Tag,Card,SectionHeading,Icon}=window.RaghavMobileAccessoriesDesignSystem_092910;
+const Row=({children})=><div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",marginBottom:14}}>{children}</div>;
+ReactDOM.createRoot(document.getElementById("root")).render(<div>
+<Row><Button>Add to cart</Button><Button variant="secondary">Details</Button><Button variant="outline">View all</Button><Button variant="ghost">Skip</Button><Button variant="whatsapp" iconLeft={<Icon name="message-circle" size={18}/>}>Order on WhatsApp</Button></Row>
+<Row><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button><Button disabled>Disabled</Button><IconButton label="Search"><Icon name="search"/></IconButton><IconButton label="Wishlist" tone="brand"><Icon name="heart"/></IconButton></Row>
+<Row><Badge>50% off</Badge><Badge tone="new">New</Badge><Badge tone="stock">In stock</Badge><Badge tone="out">Sold out</Badge><Badge tone="info">Combo</Badge><Badge tone="warn">Few left</Badge><Tag selected>iPhone</Tag><Tag>Samsung</Tag><Tag>Redmi</Tag></Row>
+<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+<Card interactive><SectionHeading eyebrow="Just in" title="New arrivals" style={{marginBottom:0}}/></Card>
+<Card tone="dark"><SectionHeading tone="dark" eyebrow="This week" title="Combo offers" style={{marginBottom:0}}/></Card></div>
+</div>);
+</script></body></html>

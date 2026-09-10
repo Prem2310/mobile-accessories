@@ -1,0 +1,7 @@
+:root{
+  --ease-out:cubic-bezier(.2,.8,.3,1);/* @kind other */
+  --ease-in-out:cubic-bezier(.4,0,.2,1);/* @kind other */
+  --dur-fast:120ms;/* @kind other */--dur-base:200ms;/* @kind other */--dur-slow:320ms;/* @kind other */
+  --transition-control:background-color var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);/* @kind other */
+  --lift-hover:translateY(-2px);/* @kind other */--press-scale:scale(.975);/* @kind other */
+}

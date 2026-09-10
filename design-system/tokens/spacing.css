@@ -1,0 +1,8 @@
+:root{
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;
+  --sp-8:32px;--sp-10:40px;--sp-12:48px;--sp-16:64px;--sp-20:80px;
+  --radius-xs:4px;--radius-sm:8px;--radius-md:12px;--radius-lg:18px;--radius-xl:26px;--radius-pill:999px;
+  --container:1200px;--gutter:24px;--gutter-mobile:16px;
+  --control-sm:34px;--control-md:44px;--control-lg:52px;
+  --tap-min:44px;
+}

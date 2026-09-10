@@ -1,0 +1,19 @@
+:root{
+  --font-display:"Baloo 2","Baloo Bhaijaan 2","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Manrope","Segoe UI",system-ui,sans-serif;
+  --font-mono:"DM Mono",ui-monospace,"SFMono-Regular",monospace;
+
+  --fs-display:44px;--fs-h1:34px;--fs-h2:26px;--fs-h3:20px;--fs-lg:17px;
+  --fs-base:15px;--fs-sm:13px;--fs-xs:11.5px;
+  --lh-tight:1.08;/* @kind other */--lh-heading:1.2;/* @kind other */--lh-body:1.55;/* @kind other */
+  --fw-regular:400;/* @kind font */--fw-medium:500;/* @kind font */--fw-semibold:600;/* @kind font */--fw-bold:700;/* @kind font */--fw-black:800;/* @kind font */
+  --ls-tight:-0.02em;/* @kind other */--ls-normal:0;/* @kind other */--ls-wide:0.06em;/* @kind other */--ls-caps:0.12em;/* @kind other */
+
+  --type-display:var(--fw-black) var(--fs-display)/var(--lh-tight) var(--font-display);
+  --type-h1:var(--fw-bold) var(--fs-h1)/var(--lh-heading) var(--font-display);
+  --type-h2:var(--fw-bold) var(--fs-h2)/var(--lh-heading) var(--font-display);
+  --type-h3:var(--fw-bold) var(--fs-h3)/var(--lh-heading) var(--font-body);
+  --type-body:var(--fw-regular) var(--fs-base)/var(--lh-body) var(--font-body);
+  --type-label:var(--fw-bold) var(--fs-xs)/1.2 var(--font-body);
+  --type-price:var(--fw-bold) var(--fs-h3)/1.1 var(--font-body);
+}
