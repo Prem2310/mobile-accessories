@@ -76,17 +76,10 @@ export function ProductPage() {
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, product.title]} />
 
       <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'var(--sp-10)' }}>
-        {/* Gallery */}
-        <div style={{ display: 'grid', gap: 'var(--sp-3)' }}>
-          <div style={{ width: '100%', aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--border-default)', overflow: 'hidden' }}>
-            {activeImage ? (
-              <img src={activeImage} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-            ) : (
-              <span style={{ font: 'var(--fw-bold) var(--fs-sm)/1.4 var(--font-body)', color: 'var(--text-faint)' }}>Product photo</span>
-            )}
-          </div>
+        {/* Gallery — thumbnails sit beside the image on desktop, below it on mobile */}
+        <div className="flex md:flex-row flex-col-reverse" style={{ gap: 'var(--sp-3)' }}>
           {product.images.length > 1 && (
-            <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
+            <div className="flex md:flex-col flex-row" style={{ gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
               {product.images.map((img, i) => (
                 <button
                   key={img + i}
@@ -109,6 +102,13 @@ export function ProductPage() {
               ))}
             </div>
           )}
+          <div style={{ flex: 1, aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--border-default)', overflow: 'hidden' }}>
+            {activeImage ? (
+              <img src={activeImage} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : (
+              <span style={{ font: 'var(--fw-bold) var(--fs-sm)/1.4 var(--font-body)', color: 'var(--text-faint)' }}>Product photo</span>
+            )}
+          </div>
         </div>
 
         {/* Buy panel */}
