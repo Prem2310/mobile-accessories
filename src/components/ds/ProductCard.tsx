@@ -18,6 +18,7 @@ export interface ProductCardProps {
   wishlisted?: boolean
   onAdd?: () => void
   onWishlist?: () => void
+  onQuickView?: () => void
   onClick?: MouseEventHandler
   style?: CSSProperties
   className?: string
@@ -36,6 +37,7 @@ export function ProductCard({
   wishlisted = false,
   onAdd,
   onWishlist,
+  onQuickView,
   onClick,
   style,
   className,
@@ -76,6 +78,21 @@ export function ProductCard({
             <Icon name="heart" size={16} />
           </IconButton>
         </span>
+        {onQuickView && (
+          <span style={{ position: 'absolute', top: 'var(--sp-2)', right: 42, opacity: hover ? 1 : 0, transition: 'opacity var(--dur-base) var(--ease-out)' }}>
+            <IconButton
+              label="Quick view"
+              tone="brand"
+              size={36}
+              onClick={(e) => {
+                e.stopPropagation()
+                onQuickView()
+              }}
+            >
+              <Icon name="eye" size={16} />
+            </IconButton>
+          </span>
+        )}
         <button
           type="button"
           onClick={(e) => {

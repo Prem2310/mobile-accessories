@@ -1,15 +1,18 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProductCard } from '../../components/ds/ProductCard'
 import { Icon } from '../../components/ds/Icon'
 import type { Product } from '../../lib/types'
 import { useCartStore } from '../../store/cart'
 import { useWishlistStore } from '../../store/wishlist'
+import { QuickViewModal } from './QuickViewModal'
 
 export function ProductGrid({ products }: { products: Product[] }) {
   const navigate = useNavigate()
   const addItem = useCartStore((s) => s.addItem)
   const toggleWishlist = useWishlistStore((s) => s.toggle)
   const wishlisted = useWishlistStore((s) => s.productIds)
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
 
   if (products.length === 0) {
     return (
@@ -56,8 +59,10 @@ export function ProductGrid({ products }: { products: Product[] }) {
               image: p.images[0],
             })
           }}
+          onQuickView={() => setQuickViewProduct(p)}
         />
       ))}
+      <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
     </div>
   )
 }
