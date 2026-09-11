@@ -196,6 +196,9 @@ export function ProductPage() {
               <IconButton label="Wishlist" tone={wishlisted ? 'brand' : 'neutral'} active={wishlisted} onClick={() => toggleWishlist(product.id)}>
                 <Icon name="heart" size={18} />
               </IconButton>
+              <IconButton label="Share" tone="neutral" onClick={() => shareProduct(product.title)}>
+                <Icon name="share-2" size={18} />
+              </IconButton>
             </div>
           </div>
 
@@ -297,4 +300,14 @@ export function ProductPage() {
       </div>
     </div>
   )
+}
+
+function shareProduct(title: string) {
+  const url = window.location.href
+  if (navigator.share) {
+    navigator.share({ title, url }).catch(() => {})
+  } else {
+    navigator.clipboard.writeText(url)
+    alert('Link copied to clipboard')
+  }
 }
