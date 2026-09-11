@@ -40,17 +40,17 @@ export function HomePage() {
         <Reveal>
           <SectionHeading title="Shop by category" action={<Link to="/categories" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--sp-4)' }}>
+        <div style={{ display: 'flex', gap: 'var(--sp-6)', overflowX: 'auto', paddingBottom: 'var(--sp-2)' }}>
           {categories.slice(0, 8).map((c, i) => (
-            <motion.div key={c.id} initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp} transition={{ delay: i * 0.04 }}>
+            <motion.div key={c.id} initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp} transition={{ delay: i * 0.04 }} style={{ flex: '0 0 auto' }}>
               <Link
                 to={`/shop?category=${c.slug}`}
-                style={{ display: 'grid', justifyItems: 'center', gap: 'var(--sp-2)', padding: 'var(--sp-5) var(--sp-3)', background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-card)', textAlign: 'center', textDecoration: 'none' }}
+                style={{ display: 'grid', justifyItems: 'center', gap: 'var(--sp-3)', width: 96, textAlign: 'center', textDecoration: 'none' }}
               >
-                <div style={{ width: 48, height: 48, borderRadius: 'var(--radius-pill)', background: 'var(--orange-50)', display: 'grid', placeItems: 'center' }}>
-                  <Icon name={c.icon ?? 'package'} size={22} color="var(--orange-500)" />
+                <div style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--surface-sunken)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', transition: 'var(--transition-control)' }}>
+                  <Icon name={c.icon ?? 'package'} size={26} color="var(--navy-900)" />
                 </div>
-                <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
+                <div style={{ font: 'var(--fw-semibold) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
               </Link>
             </motion.div>
           ))}
