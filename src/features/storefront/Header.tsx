@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '../../components/ds/Icon'
 import { IconButton } from '../../components/ds/IconButton'
-import { getCategories, getSiteSettings } from '../../lib/catalog'
+import { formatINR } from '../../lib/format'
+import { getBestsellers, getCategories, getSiteSettings } from '../../lib/catalog'
 import { useCartCount, useCartStore } from '../../store/cart'
 import { useWishlistStore } from '../../store/wishlist'
 import { MobileMenu } from './MobileMenu'
@@ -18,6 +19,7 @@ const NAV_LINKS = [
 export function Header() {
   const settings = getSiteSettings()
   const categories = getCategories()
+  const bestsellers = getBestsellers(3)
   const [searchOpen, setSearchOpen] = useState(false)
   const [shopOpen, setShopOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -66,16 +68,50 @@ export function Header() {
                     <Icon name="chevron-down" size={14} />
                   </Link>
                   {shopOpen && (
-                    <div style={{ position: 'absolute', top: '100%', left: -12, background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-hover)', padding: 'var(--sp-2)', minWidth: 200, display: 'grid' }}>
-                      {categories.map((c) => (
-                        <Link
-                          key={c.id}
-                          to={`/shop?category=${c.slug}`}
-                          style={{ padding: '8px 12px', borderRadius: 'var(--radius-sm)', font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-body)', textDecoration: 'none' }}
-                        >
-                          {c.name}
-                        </Link>
-                      ))}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: -12,
+                        background: 'var(--white)',
+                        border: '1px solid var(--border-subtle)',
+                        borderRadius: 'var(--radius-md)',
+                        boxShadow: 'var(--shadow-hover)',
+                        padding: 'var(--sp-5)',
+                        display: 'flex',
+                        gap: 'var(--sp-8)',
+                      }}
+                    >
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(150px, 1fr))', gap: '4px var(--sp-6)', alignContent: 'start' }}>
+                        {categories.map((c) => (
+                          <Link
+                            key={c.id}
+                            to={`/shop?category=${c.slug}`}
+                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 4px', borderRadius: 'var(--radius-sm)', font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-body)', textDecoration: 'none', whiteSpace: 'nowrap' }}
+                          >
+                            <Icon name={c.icon ?? 'package'} size={16} color="var(--gray-400)" />
+                            {c.name}
+                          </Link>
+                        ))}
+                      </div>
+                      {bestsellers.length > 0 && (
+                        <div style={{ borderLeft: '1px solid var(--border-subtle)', paddingLeft: 'var(--sp-6)', minWidth: 200 }}>
+                          <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 'var(--ls-caps)', marginBottom: 12 }}>Best sellers</div>
+                          <div style={{ display: 'grid', gap: 12 }}>
+                            {bestsellers.map((p) => (
+                              <Link key={p.id} to={`/products/${p.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+                                <div style={{ width: 40, height: 40, flexShrink: 0, borderRadius: 'var(--radius-sm)', background: 'var(--surface-sunken)', overflow: 'hidden' }}>
+                                  {p.images[0] && <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                                </div>
+                                <div style={{ minWidth: 0 }}>
+                                  <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-strong)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 150 }}>{p.title}</div>
+                                  <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--price)' }}>{formatINR(p.price)}</div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
