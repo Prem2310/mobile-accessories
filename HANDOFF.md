@@ -49,6 +49,16 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 
 You asked for nested categories like Cases → iPhone → model. The schema already supports one level of nesting (`categories.parent_id`, unused), but modeling *model-level* filtering as categories would mean one product needs to live in several categories at once (one case fits 4+ iPhone models) — the schema is one category per product, so that breaks. Instead this is now a **filter facet**: `compatibility` on each product (already existed, now surfaced as "Compatible with" checkboxes in Shop filters, sourced live from what's on real products — no separate taxonomy to maintain). Category stays flat (Phone Cases, Screen Protectors, …); model/brand narrow within it. If the flat category list ever gets long enough to need visual grouping (not filtering), `parent_id` is there for that — a separate, smaller change.
 
+## Homepage redesign (Ecomus-style reference, this pass)
+
+You shared a reference screenshot and asked to keep only the Raghav logo, matching its structure otherwise. Done in phases:
+- **A — Chrome**: page/header went from navy to white (`--surface-page`/`--surface-dark` retoned in `design-system/tokens/colors.css`); navy now only shows in the footer and dark sections. Header rebuilt white with a hairline border; logo unchanged.
+- **B — ProductCard**: dropped the bordered/shadowed card + full-width "Add to cart" pill for a flush image + text layout with a "QUICK ADD" bar that slides up on hover — one component, used on 5 surfaces.
+- **C — Category row**: "Shop by category" is now a horizontal scroller of circular icon badges instead of bordered square cards.
+- **D — Hot Deals + testimonial**: new homepage sections. Hot Deals only appears once you set a real "Ends at" on an offer in `/admin/banners` (Offer strips form) — no fabricated countdown. Testimonial pulls a real approved review from the `reviews` table (already had 4 seeded rows, never shown anywhere before).
+
+**Skipped on purpose** (per no-fabricated-content rule): brand-logo strip (no real partnerships — `brand` is null on every product), newsletter signup (no email backend).
+
 ## Known gaps (not started)
 
 - **Coupons UI / reviews moderation** — tables + RLS exist, no admin screens yet.
