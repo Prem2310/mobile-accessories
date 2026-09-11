@@ -160,6 +160,7 @@ function OfferStrips() {
   const [title, setTitle] = useState('')
   const [subtitle, setSubtitle] = useState('')
   const [tone, setTone] = useState<'navy' | 'orange'>('navy')
+  const [endsAt, setEndsAt] = useState('')
 
   const refresh = async () => {
     setLoading(true)
@@ -174,9 +175,10 @@ function OfferStrips() {
   const add = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    await adminCreateOffer({ title: title.trim(), subtitle: subtitle || null, tone, sort_order: offers.length + 1 })
+    await adminCreateOffer({ title: title.trim(), subtitle: subtitle || null, tone, ends_at: endsAt ? new Date(endsAt).toISOString() : null, sort_order: offers.length + 1 })
     setTitle('')
     setSubtitle('')
+    setEndsAt('')
     await refresh()
     await loadCatalog()
   }
@@ -205,6 +207,7 @@ function OfferStrips() {
         <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Flat 20% off on TWS earbuds" />
         <Input label="Subtitle" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="This week only" />
         <Select label="Tone" options={[{ value: 'navy', label: 'Navy' }, { value: 'orange', label: 'Orange' }]} value={tone} onChange={(e) => setTone(e.target.value as 'navy' | 'orange')} />
+        <Input label="Ends at (optional — shows a countdown on the homepage Hot Deals section)" type="datetime-local" value={endsAt} onChange={(e) => setEndsAt(e.target.value)} />
         <Button type="submit">Add offer</Button>
       </form>
 

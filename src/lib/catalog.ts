@@ -117,6 +117,10 @@ export function getReviewsForProduct(productId: string): Review[] {
   return reviews.filter((r) => r.productId === productId && r.approved)
 }
 
+export function getApprovedReviews(): Review[] {
+  return reviews.filter((r) => r.approved)
+}
+
 export function getActiveOffers(): Offer[] {
   return offers.filter((o) => o.active)
 }

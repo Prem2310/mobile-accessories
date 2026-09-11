@@ -90,7 +90,7 @@ function mapProduct(row: ProductRow): Product {
   }
 }
 
-function mapOffer(row: { id: string; title: string; subtitle: string | null; tone: string; cta_label: string | null; cta_href: string | null; active: boolean }): Offer {
+function mapOffer(row: { id: string; title: string; subtitle: string | null; tone: string; cta_label: string | null; cta_href: string | null; starts_at: string | null; ends_at: string | null; active: boolean }): Offer {
   return {
     id: row.id,
     title: row.title,
@@ -98,6 +98,8 @@ function mapOffer(row: { id: string; title: string; subtitle: string | null; ton
     tone: row.tone as Offer['tone'],
     ctaLabel: row.cta_label ?? undefined,
     ctaHref: row.cta_href ?? undefined,
+    startsAt: row.starts_at ?? undefined,
+    endsAt: row.ends_at ?? undefined,
     active: row.active,
   }
 }

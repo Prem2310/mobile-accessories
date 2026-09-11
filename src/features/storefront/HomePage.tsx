@@ -7,6 +7,7 @@ import { SectionHeading } from '../../components/ds/SectionHeading'
 import { getActiveOffers, getBestsellers, getCategories, getFeaturedProducts, getNewArrivals, getSiteSettings } from '../../lib/catalog'
 import { buildGeneralEnquiryMessage, waLink } from '../../lib/whatsapp'
 import { HeroCarousel } from './HeroCarousel'
+import { HotDeals, TestimonialSection } from './HotDeals'
 import { ProductGrid } from './ProductGrid'
 
 const fadeUp = {
@@ -35,6 +36,10 @@ export function HomePage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-20)', paddingBottom: 'var(--sp-16)' }}>
       <HeroCarousel />
+
+      <Reveal>
+        <HotDeals />
+      </Reveal>
 
       <section className="container-page">
         <Reveal>
@@ -90,6 +95,10 @@ export function HomePage() {
           ))}
         </section>
       )}
+
+      <Reveal>
+        <TestimonialSection />
+      </Reveal>
 
       <InstagramSection settings={settings} />
 
