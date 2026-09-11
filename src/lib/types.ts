@@ -21,7 +21,10 @@ export interface ProductVariant {
   price: number
   mrp?: number
   stock: number
-  images?: string[]
+  /** Optional — when set, selecting this variant swaps the PDP gallery to this photo. */
+  imageUrl?: string
+  /** Optional swatch color (hex) — when set alongside a "Color"-style attribute, renders as a color dot instead of a text pill. */
+  swatchHex?: string
 }
 
 export interface ProductSpec {

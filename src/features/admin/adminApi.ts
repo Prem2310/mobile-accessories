@@ -103,6 +103,15 @@ export async function adminDeleteVariant(id: string) {
   if (error) throw error
 }
 
+export async function adminUploadVariantImage(variantId: string, file: File) {
+  const path = `variants/${variantId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+  const { error: uploadError } = await supabase.storage.from('product-images').upload(path, file)
+  if (uploadError) throw uploadError
+  const { data: publicUrl } = supabase.storage.from('product-images').getPublicUrl(path)
+  await adminUpdateVariant(variantId, { image_url: publicUrl.publicUrl })
+  return publicUrl.publicUrl
+}
+
 export async function adminAdjustStock(productId: string, delta: number, reason: string) {
   const { data: product, error: readError } = await supabase.from('products').select('stock').eq('id', productId).single()
   if (readError) throw readError

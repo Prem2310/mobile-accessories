@@ -306,31 +306,37 @@ export type Database = {
           attributes: Json
           created_at: string
           id: string
+          image_url: string | null
           mrp: number | null
           price: number
           product_id: string
           sku: string
           stock: number
+          swatch_hex: string | null
         }
         Insert: {
           attributes?: Json
           created_at?: string
           id?: string
+          image_url?: string | null
           mrp?: number | null
           price: number
           product_id: string
           sku: string
           stock?: number
+          swatch_hex?: string | null
         }
         Update: {
           attributes?: Json
           created_at?: string
           id?: string
+          image_url?: string | null
           mrp?: number | null
           price?: number
           product_id?: string
           sku?: string
           stock?: number
+          swatch_hex?: string | null
         }
         Relationships: [
           {

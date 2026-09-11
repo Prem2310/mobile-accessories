@@ -25,7 +25,6 @@ export function ProductPage() {
   const [tab, setTab] = useState('description')
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   useEffect(() => setActiveImageIndex(0), [product?.id])
-  const activeImage = product?.images[activeImageIndex] ?? product?.images[0]
   const addItem = useCartStore((s) => s.addItem)
   const openCart = useCartStore((s) => s.open)
   const wishlisted = useWishlistStore((s) => s.has(product?.id ?? ''))
@@ -39,6 +38,7 @@ export function ProductPage() {
   const mrp = variant?.mrp ?? product?.mrp
   const stock = variant ? variant.stock : (product?.stock ?? 0)
   const outOfStock = stock <= 0
+  const activeImage = variant?.imageUrl ?? product?.images[activeImageIndex] ?? product?.images[0]
 
   const whatsappMessage = useMemo(() => (product ? buildProductOrderMessage(settings, product, { variant, quantity }) : ''), [product, settings, variant, quantity])
 
@@ -139,26 +139,48 @@ export function ProductPage() {
             <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
               <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>{product.variantLabel ?? 'Variant'}</div>
               <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
-                {product.variants.map((v, i) => (
-                  <button
-                    key={v.id}
-                    onClick={() => setVariantIndex(i)}
-                    disabled={v.stock <= 0}
-                    style={{
-                      padding: '0 var(--sp-4)',
-                      height: 'var(--control-sm)',
-                      borderRadius: 'var(--radius-pill)',
-                      border: '1.5px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-default)'),
-                      background: i === variantIndex ? 'var(--gray-50)' : 'var(--white)',
-                      color: v.stock <= 0 ? 'var(--text-faint)' : 'var(--text-strong)',
-                      font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
-                      cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',
-                      textDecoration: v.stock <= 0 ? 'line-through' : 'none',
-                    }}
-                  >
-                    {Object.values(v.attributes).join(', ')}
-                  </button>
-                ))}
+                {product.variants.map((v, i) =>
+                  v.swatchHex ? (
+                    <button
+                      key={v.id}
+                      onClick={() => setVariantIndex(i)}
+                      disabled={v.stock <= 0}
+                      aria-label={Object.values(v.attributes).join(', ')}
+                      title={Object.values(v.attributes).join(', ')}
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        border: '2px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-subtle)'),
+                        padding: 2,
+                        background: 'var(--white)',
+                        cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',
+                        opacity: v.stock <= 0 ? 0.4 : 1,
+                      }}
+                    >
+                      <span style={{ display: 'block', width: '100%', height: '100%', borderRadius: '50%', background: v.swatchHex }} />
+                    </button>
+                  ) : (
+                    <button
+                      key={v.id}
+                      onClick={() => setVariantIndex(i)}
+                      disabled={v.stock <= 0}
+                      style={{
+                        padding: '0 var(--sp-4)',
+                        height: 'var(--control-sm)',
+                        borderRadius: 'var(--radius-pill)',
+                        border: '1.5px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-default)'),
+                        background: i === variantIndex ? 'var(--gray-50)' : 'var(--white)',
+                        color: v.stock <= 0 ? 'var(--text-faint)' : 'var(--text-strong)',
+                        font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
+                        cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',
+                        textDecoration: v.stock <= 0 ? 'line-through' : 'none',
+                      }}
+                    >
+                      {Object.values(v.attributes).join(', ')}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           )}

@@ -15,6 +15,7 @@ import {
   adminUpdateProduct,
   adminUpdateVariant,
   adminUploadProductImages,
+  adminUploadVariantImage,
 } from './adminApi'
 
 type CategoryRow = Database['public']['Tables']['categories']['Row']
@@ -310,6 +311,39 @@ export function ProductEditorPanel({
                       <button onClick={() => removeVariant(v.id)} style={{ border: 0, background: 'transparent', color: 'var(--gray-400)', cursor: 'pointer', height: 'var(--control-md)' }} aria-label="Delete variant">
                         <Icon name="trash-2" size={16} />
                       </button>
+                      <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                          <div style={{ width: 36, height: 36, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1.5px dashed var(--border-default)', background: 'var(--gray-100)', display: 'grid', placeItems: 'center' }}>
+                            {v.image_url ? <img src={v.image_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Icon name="plus" size={14} color="var(--gray-400)" />}
+                          </div>
+                          <span style={{ font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)' }}>Photo for this variant</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0]
+                              if (file) await adminUploadVariantImage(v.id, file)
+                              await refreshVariantsAndImages()
+                              e.target.value = ''
+                            }}
+                          />
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)' }}>Swatch color</span>
+                          <input
+                            type="color"
+                            defaultValue={v.swatch_hex ?? '#cccccc'}
+                            onBlur={(e) => updateVariant(v, { swatch_hex: e.target.value })}
+                            style={{ width: 28, height: 28, border: 0, padding: 0, cursor: 'pointer' }}
+                          />
+                        </label>
+                        {v.swatch_hex && (
+                          <button onClick={() => updateVariant(v, { swatch_hex: null })} style={{ border: 0, background: 'none', color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', cursor: 'pointer', textDecoration: 'underline' }}>
+                            Clear
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )
                 })}

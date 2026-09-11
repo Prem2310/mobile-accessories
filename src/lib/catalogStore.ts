@@ -40,7 +40,7 @@ function mapCategory(row: {
   }
 }
 
-function mapVariant(row: { id: string; sku: string; attributes: unknown; price: number; mrp: number | null; stock: number }): ProductVariant {
+function mapVariant(row: { id: string; sku: string; attributes: unknown; price: number; mrp: number | null; stock: number; image_url?: string | null; swatch_hex?: string | null }): ProductVariant {
   return {
     id: row.id,
     sku: row.sku,
@@ -48,6 +48,8 @@ function mapVariant(row: { id: string; sku: string; attributes: unknown; price: 
     price: Number(row.price),
     mrp: row.mrp != null ? Number(row.mrp) : undefined,
     stock: row.stock,
+    imageUrl: row.image_url ?? undefined,
+    swatchHex: row.swatch_hex ?? undefined,
   }
 }
 
