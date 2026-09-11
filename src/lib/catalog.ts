@@ -1,5 +1,5 @@
-import { categories, offers, products, reviews, siteSettings } from './catalogStore'
-import type { Category, Offer, Product, Review, SiteSettings } from './types'
+import { banners, categories, offers, products, reviews, siteSettings } from './catalogStore'
+import type { Banner, Category, Offer, Product, Review, SiteSettings } from './types'
 
 /**
  * Data-access seam: every storefront/admin surface reads the catalog through these functions,
@@ -119,4 +119,8 @@ export function getReviewsForProduct(productId: string): Review[] {
 
 export function getActiveOffers(): Offer[] {
   return offers.filter((o) => o.active)
+}
+
+export function getHeroBanners(): Banner[] {
+  return [...banners].sort((a, b) => a.order - b.order)
 }

@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Category, Offer, Product, ProductVariant, Review, SiteSettings } from './types'
+import type { Banner, Category, Offer, Product, ProductVariant, Review, SiteSettings } from './types'
 
 /**
  * In-memory cache populated once from Supabase at app boot (see loadCatalog()).
@@ -10,6 +10,7 @@ import type { Category, Offer, Product, ProductVariant, Review, SiteSettings } f
 export let categories: Category[] = []
 export let products: Product[] = []
 export let offers: Offer[] = []
+export let banners: Banner[] = []
 export let reviews: Review[] = []
 export let siteSettings: SiteSettings = {
   storeName: 'Raghav Mobile Accessories',
@@ -101,6 +102,22 @@ function mapOffer(row: { id: string; title: string; subtitle: string | null; ton
   }
 }
 
+function mapBanner(row: {
+  id: string; title: string; description: string | null; cta_label: string | null; cta_href: string | null
+  image_desktop_url: string | null; image_mobile_url: string | null; sort_order: number
+}): Banner {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description ?? undefined,
+    ctaLabel: row.cta_label ?? undefined,
+    ctaHref: row.cta_href ?? undefined,
+    imageDesktop: row.image_desktop_url ?? undefined,
+    imageMobile: row.image_mobile_url ?? undefined,
+    order: row.sort_order,
+  }
+}
+
 function mapReview(row: { id: string; product_id: string; author: string; rating: number; comment: string | null; verified: boolean; created_at: string; approved: boolean }): Review {
   return {
     id: row.id,
@@ -138,10 +155,11 @@ function mapSettings(row: {
 let loaded = false
 
 export async function loadCatalog(): Promise<void> {
-  const [categoriesRes, productsRes, offersRes, reviewsRes, settingsRes] = await Promise.all([
+  const [categoriesRes, productsRes, offersRes, bannersRes, reviewsRes, settingsRes] = await Promise.all([
     supabase.from('categories').select('*').order('sort_order'),
     supabase.from('products').select('*, product_variants(*), product_images(public_url, position)'),
     supabase.from('offers').select('*').order('sort_order'),
+    supabase.from('banners').select('*').eq('enabled', true).order('sort_order'),
     supabase.from('reviews').select('*').eq('approved', true),
     supabase.from('site_settings').select('*').single(),
   ])
@@ -149,12 +167,14 @@ export async function loadCatalog(): Promise<void> {
   if (categoriesRes.error) throw categoriesRes.error
   if (productsRes.error) throw productsRes.error
   if (offersRes.error) throw offersRes.error
+  if (bannersRes.error) throw bannersRes.error
   if (reviewsRes.error) throw reviewsRes.error
   if (settingsRes.error) throw settingsRes.error
 
   categories = categoriesRes.data.map(mapCategory)
   products = productsRes.data.map((row) => mapProduct(row as ProductRow))
   offers = offersRes.data.map(mapOffer)
+  banners = bannersRes.data.map(mapBanner)
   reviews = reviewsRes.data.map(mapReview)
   siteSettings = mapSettings(settingsRes.data)
   loaded = true

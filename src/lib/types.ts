@@ -111,3 +111,14 @@ export interface Offer {
   endsAt?: string
   active: boolean
 }
+
+export interface Banner {
+  id: string
+  title: string
+  description?: string
+  ctaLabel?: string
+  ctaHref?: string
+  imageDesktop?: string
+  imageMobile?: string
+  order: number
+}

@@ -154,6 +154,14 @@ export async function adminDeleteBanner(id: string) {
   if (error) throw error
 }
 
+export async function adminUploadBannerImage(file: File, slot: 'desktop' | 'mobile') {
+  const path = `${slot}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+  const { error: uploadError } = await supabase.storage.from('banners').upload(path, file)
+  if (uploadError) throw uploadError
+  const { data } = supabase.storage.from('banners').getPublicUrl(path)
+  return data.publicUrl
+}
+
 export async function adminListOffers() {
   const { data, error } = await supabase.from('offers').select('*').order('sort_order')
   if (error) throw error

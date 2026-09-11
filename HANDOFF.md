@@ -25,7 +25,8 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 
 ## What's built
 
-- **Storefront**: home (3D hero + fallback), shop/category/product pages, cart drawer, wishlist — all `localStorage`, no login for customers.
+- **Storefront**: home (light hero — banner carousel or text fallback, no 3D), shop/category/product pages, cart drawer, wishlist — all `localStorage`, no login for customers.
+- **Hero banners**: `/admin/banners` → "Hero banners" — upload desktop + mobile images per banner, with title/description/CTA. Homepage shows them as a full-bleed carousel (arrows + dots, no autoplay). With zero banners uploaded, the homepage falls back to a clean text-only hero instead of a placeholder — upload at least one banner image to get the photography-led look you asked for; nothing to configure beyond that.
 - **Shop filters**: in-stock, on-discount, price range, rating, brand, and "Compatible with" (phone model — derived from `products.compatibility`, e.g. filtering "iPhone 15" shows every case/glass listed for it). All state lives in the URL (`?model=iPhone+15`), so filtered views are shareable and back-button-safe. Desktop shows a sticky sidebar; mobile gets a "Filters" button opening a bottom sheet (there was no way to filter on mobile before today).
 - **Admin products filtering**: search by title/slug, filter by category, stock level (low/out), and visibility, above the products table — this was the "manage products is hard, no filter" gap.
 - **Product gallery**: PDP shows a main photo + thumbnail strip for products with multiple images; thumbnails swap the main image on click.
@@ -38,6 +39,7 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 
 ## Fixed today
 
+- **Hero rebuilt twice today.** First pass kept the 3D product-cluster idea but you didn't like it and asked for a photography-led carousel like an Awwwards/Dribbble/21st.dev reference (light background, real product images, arrow-nav carousel, trust-badge strip underneath) — no 3D at all. Rebuilt as `HeroCarousel.tsx`: reads from the `banners` table (schema already had it, nothing was wired to it — `AdminBannersPage` only ever managed `offers`, the text strips). Removed the 3D scene entirely (`src/features/3d/`, `@react-three/fiber`, `@react-three/drei`, `three` — ~900KB off the bundle) since there was no live use of it left and no reason to keep the dependency around unused.
 - **PDP layout bug** (`localhost:5173/products/dulero-matel-case-for-iphone` and any product with a portrait photo): the image frame had a circular width/aspect-ratio sizing dependency that made the box balloon to ~3x its column width whenever a non-square photo was uploaded. Fixed by giving the frame an explicit `width: 100%` and switching to `object-fit: contain` so portrait/landscape phone photos aren't cropped.
 - **Admin editor clobbering unsaved edits**: uploading a photo, adding a variant, or editing a variant field used to re-fetch the whole product row and silently wipe out anything typed into Basic/Pricing/Flags that hadn't been saved yet. Variant/image actions now only refresh those two lists, not the rest of the form.
 - **Editor panel horizontal scroll**: fixed-width grids in the variant row and pricing row could force the whole slide-over to scroll sideways on narrow widths, hiding fields. Now responsive (`auto-fit`) and the scroll container clips horizontal overflow.
@@ -50,7 +52,7 @@ You asked for nested categories like Cases → iPhone → model. The schema alre
 ## Known gaps (not started)
 
 - **Coupons UI / reviews moderation** — tables + RLS exist, no admin screens yet.
-- **Banner image upload** — `AdminBannersPage` is text/link fields only; no file picker wired.
+- **No real product or banner photography yet.** The catalog/hero infrastructure is fully built (multi-photo gallery, banner carousel), but almost every product still shows a placeholder and there are no hero banners uploaded — the site will look empty/generic until real photos go in via the admin panel. This is the single biggest thing standing between the current build and looking like the reference you shared.
 - **SEO** — no sitemap.xml, robots.txt, or JSON-LD yet.
 - **Analytics** — nothing to show; there's no `orders` table since checkout is WhatsApp-only. Would need a lightweight "order intent" log if you want numbers.
 - **Mobile admin layout** — the sidebar is a fixed 220px column and the products table scrolls horizontally past ~800px. Usable on desktop/tablet; a shop owner managing stock from their phone will find it cramped. The product editor panel itself is full-width on mobile already, just the table/sidebar around it aren't.

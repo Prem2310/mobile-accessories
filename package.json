@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.8",
-    "@react-three/fiber": "^9.7.0",
     "@supabase/supabase-js": "^2.116.0",
     "clsx": "^2.1.1",
     "framer-motion": "^13.2.0",
@@ -19,7 +17,6 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-router-dom": "^7.18.3",
-    "three": "^0.186.0",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
@@ -27,7 +24,6 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.5.6",
     "oxlint": "^1.81.0",
