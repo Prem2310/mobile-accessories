@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Layout } from './app/Layout'
 import { CategoriesPage } from './features/storefront/CategoriesPage'
 import { HomePage } from './features/storefront/HomePage'
+import { NotFoundPage } from './features/storefront/NotFoundPage'
 import { OffersPage } from './features/storefront/OffersPage'
 import { ProductPage } from './features/storefront/ProductPage'
 import { ShopPage } from './features/storefront/ShopPage'
@@ -28,6 +29,7 @@ function App() {
           <Route path="offers" element={<OffersPage />} />
           <Route path="products/:slug" element={<ProductPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route
           path="admin"

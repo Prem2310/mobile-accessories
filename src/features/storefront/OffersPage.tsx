@@ -10,7 +10,7 @@ export function OffersPage() {
   return (
     <div className="container-page py-10" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-6)' }}>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, 'Offers']} />
-      <SectionHeading eyebrow="Limited time" title="Current offers" />
+      <SectionHeading title="Current offers" subtitle={offers.length > 0 ? `${offers.length} running now` : undefined} />
       <div style={{ display: 'grid', gap: 'var(--sp-4)' }}>
         {offers.map((o) => (
           <OfferBanner

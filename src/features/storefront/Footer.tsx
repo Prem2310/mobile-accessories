@@ -12,22 +12,6 @@ const columns: { title: string; items: { label: string; to: string }[] }[] = [
       { label: 'Offers', to: '/offers' },
     ],
   },
-  {
-    title: 'Customer Support',
-    items: [
-      { label: 'Shipping', to: '/shipping' },
-      { label: 'Returns', to: '/returns' },
-      { label: 'Contact', to: '/contact' },
-    ],
-  },
-  {
-    title: 'About Raghav',
-    items: [
-      { label: 'About us', to: '/about' },
-      { label: 'Privacy', to: '/privacy' },
-      { label: 'Terms', to: '/terms' },
-    ],
-  },
 ]
 
 export function Footer() {

@@ -9,7 +9,7 @@ export function CategoriesPage() {
   return (
     <div className="container-page py-10" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-6)' }}>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, 'Categories']} />
-      <SectionHeading eyebrow="Browse" title="Shop by category" />
+      <SectionHeading title="Shop by category" subtitle={`${categories.length} categories`} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 'var(--sp-4)' }}>
         {categories.map((c) => (
           <Link

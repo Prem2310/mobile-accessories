@@ -14,7 +14,7 @@ export function WishlistPage() {
   return (
     <div className="container-page py-10" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-6)' }}>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, 'Wishlist']} />
-      <SectionHeading eyebrow="Saved" title="Your wishlist" />
+      <SectionHeading title="Your wishlist" subtitle={items.length > 0 ? `${items.length} saved` : undefined} />
       {items.length === 0 ? (
         <div style={{ display: 'grid', justifyItems: 'center', gap: 'var(--sp-3)', padding: 'var(--sp-20) 0', textAlign: 'center' }}>
           <Icon name="heart" size={40} color="var(--gray-300)" />

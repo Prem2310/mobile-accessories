@@ -134,8 +134,8 @@ export function ShopPage() {
     <div className="container-page py-10" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-6)' }}>
       <Breadcrumbs items={category ? [{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, category.name] : [{ label: 'Home', href: '/' }, 'Shop']} />
       <SectionHeading
-        eyebrow={category ? category.name : 'All products'}
         title={category ? category.name : filter.query ? `Results for “${filter.query}”` : 'Shop everything'}
+        subtitle={`${products.length} product${products.length === 1 ? '' : 's'}`}
         action={
           <Select
             options={SORT_OPTIONS}

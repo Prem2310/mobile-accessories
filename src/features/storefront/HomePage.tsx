@@ -38,7 +38,7 @@ export function HomePage() {
 
       <section className="container-page">
         <Reveal>
-          <SectionHeading eyebrow="Browse" title="Shop by category" action={<Link to="/categories" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
+          <SectionHeading title="Shop by category" action={<Link to="/categories" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--sp-4)' }}>
           {categories.slice(0, 8).map((c, i) => (
@@ -59,21 +59,21 @@ export function HomePage() {
 
       <section className="container-page">
         <Reveal>
-          <SectionHeading eyebrow="Trending" title="Trending now" action={<Link to="/shop?sort=featured" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
+          <SectionHeading title="Trending now" action={<Link to="/shop?sort=featured" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
           <ProductGrid products={featured} />
         </Reveal>
       </section>
 
       <section className="container-page">
         <Reveal>
-          <SectionHeading eyebrow="Popular" title="Best sellers" action={<Link to="/shop?sort=bestselling" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
+          <SectionHeading title="Best sellers" action={<Link to="/shop?sort=bestselling" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
           <ProductGrid products={bestsellers} />
         </Reveal>
       </section>
 
       <section className="container-page">
         <Reveal>
-          <SectionHeading eyebrow="Just in" title="Latest arrivals" action={<Link to="/shop?sort=newest" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
+          <SectionHeading title="Latest arrivals" action={<Link to="/shop?sort=newest" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
           <ProductGrid products={newArrivals} />
         </Reveal>
       </section>
@@ -81,7 +81,7 @@ export function HomePage() {
       {offers.length > 0 && (
         <section className="container-page" style={{ display: 'grid', gap: 'var(--sp-4)' }}>
           <Reveal>
-            <SectionHeading eyebrow="Don't miss out" title="Limited-time offers" />
+            <SectionHeading title="Limited-time offers" />
           </Reveal>
           {offers.map((o) => (
             <Reveal key={o.id}>
@@ -207,16 +207,33 @@ function WhyRaghav() {
   return (
     <section className="container-page">
       <Reveal>
-        <SectionHeading eyebrow="Why Raghav" title="Why shop with us" />
+        <SectionHeading title="Why shop with us" />
       </Reveal>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--sp-5)' }}>
+      {/* a divided strip, not identical shadowed cards — three plain facts, not three decorated boxes */}
+      <div className="grid grid-cols-1 md:grid-cols-3" style={{ border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
         {points.map((p, i) => (
-          <motion.div key={p.title} initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp} transition={{ delay: i * 0.08 }} style={{ background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: 'var(--sp-6)', boxShadow: 'var(--shadow-card)' }}>
-            <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-pill)', background: 'var(--orange-50)', display: 'grid', placeItems: 'center', marginBottom: 'var(--sp-3)' }}>
-              <Icon name={p.icon} size={20} color="var(--orange-500)" />
+          <motion.div
+            key={p.title}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            transition={{ delay: i * 0.08 }}
+            style={{
+              padding: 'var(--sp-6)',
+              display: 'flex',
+              gap: 'var(--sp-4)',
+              alignItems: 'flex-start',
+              borderTop: i > 0 ? '1px solid var(--border-subtle)' : undefined,
+              borderLeft: 'none',
+            }}
+            className={i > 0 ? 'md:border-t-0 md:border-l' : undefined}
+          >
+            <Icon name={p.icon} size={22} color="var(--orange-500)" style={{ marginTop: 2, flexShrink: 0 }} />
+            <div>
+              <div style={{ font: 'var(--fw-bold) var(--fs-lg)/1.3 var(--font-body)', color: 'var(--text-strong)', marginBottom: 'var(--sp-1)' }}>{p.title}</div>
+              <p style={{ color: 'var(--text-muted)' }}>{p.body}</p>
             </div>
-            <div style={{ font: 'var(--fw-bold) var(--fs-lg)/1.3 var(--font-body)', color: 'var(--text-strong)', marginBottom: 'var(--sp-2)' }}>{p.title}</div>
-            <p style={{ color: 'var(--text-muted)' }}>{p.body}</p>
           </motion.div>
         ))}
       </div>
@@ -229,7 +246,6 @@ function InstagramSection({ settings }: { settings: ReturnType<typeof getSiteSet
     <section className="container-page">
       <Reveal>
         <SectionHeading
-          eyebrow="Social proof"
           title="Follow Raghav on Instagram"
           action={
             <a href={`https://instagram.com/${settings.instagramHandle.replace('@', '')}`} target="_blank" rel="noreferrer" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>
