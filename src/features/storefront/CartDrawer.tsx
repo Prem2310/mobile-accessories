@@ -4,7 +4,7 @@ import { Button } from '../../components/ds/Button'
 import { Icon } from '../../components/ds/Icon'
 import { IconButton } from '../../components/ds/IconButton'
 import { QuantityStepper } from '../../components/ds/QuantityStepper'
-import { getSiteSettings } from '../../lib/catalog'
+import { getBestsellers, getSiteSettings } from '../../lib/catalog'
 import { formatINR } from '../../lib/format'
 import { buildCartMessage, waLink } from '../../lib/whatsapp'
 import { useCartStore, useCartTotal } from '../../store/cart'
@@ -15,8 +15,12 @@ export function CartDrawer() {
   const close = useCartStore((s) => s.close)
   const setQuantity = useCartStore((s) => s.setQuantity)
   const removeItem = useCartStore((s) => s.removeItem)
+  const addItem = useCartStore((s) => s.addItem)
   const total = useCartTotal()
   const settings = getSiteSettings()
+  const remaining = Math.max(0, settings.freeDeliveryThreshold - total)
+  const progress = Math.min(100, (total / settings.freeDeliveryThreshold) * 100)
+  const crossSell = getBestsellers(6).filter((p) => !items.some((i) => i.productId === p.id)).slice(0, 3)
 
   return (
     <AnimatePresence>
@@ -55,6 +59,21 @@ export function CartDrawer() {
               </IconButton>
             </div>
 
+            {items.length > 0 && (
+              <div style={{ padding: 'var(--sp-4) var(--sp-5)', background: 'var(--white)', borderBottom: '1px solid var(--border-subtle)' }}>
+                <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--text-muted)', marginBottom: 8 }}>
+                  {remaining > 0 ? (
+                    <>Add <strong style={{ color: 'var(--ink-900)' }}>{formatINR(remaining)}</strong> more for free delivery</>
+                  ) : (
+                    <span style={{ color: 'var(--green-600)' }}>You've unlocked free delivery</span>
+                  )}
+                </div>
+                <div style={{ height: 4, borderRadius: 999, background: 'var(--gray-200)', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${progress}%`, background: 'var(--ink-900)', transition: 'width var(--dur-base) var(--ease-out)' }} />
+                </div>
+              </div>
+            )}
+
             <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--sp-5)', display: 'grid', gap: 'var(--sp-4)', alignContent: 'start' }}>
               {items.length === 0 ? (
                 <EmptyCart onClose={close} />
@@ -86,6 +105,32 @@ export function CartDrawer() {
                     </button>
                   </div>
                 ))
+              )}
+
+              {items.length > 0 && crossSell.length > 0 && (
+                <div>
+                  <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)', marginBottom: 10 }}>You may also like</div>
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    {crossSell.map((p) => (
+                      <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+                        <div style={{ width: 44, height: 44, flexShrink: 0, borderRadius: 'var(--radius-sm)', background: 'var(--surface-sunken)', overflow: 'hidden' }}>
+                          {p.images[0] && <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-strong)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+                          <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--price)' }}>{formatINR(p.price)}</div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => addItem({ productId: p.id, title: p.title, price: p.price, slug: p.slug, quantity: 1, image: p.images[0] })}
+                          style={{ border: '1.5px solid var(--ink-900)', borderRadius: 999, background: 'transparent', color: 'var(--ink-900)', width: 28, height: 28, cursor: 'pointer', flexShrink: 0 }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
 
