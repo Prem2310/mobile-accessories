@@ -10,9 +10,16 @@ type OfferRow = Database['public']['Tables']['offers']['Row']
 type SiteSettingsRow = Database['public']['Tables']['site_settings']['Row']
 
 export async function adminListProducts() {
-  const { data, error } = await supabase.from('products').select('*, categories(name)').order('created_at', { ascending: false })
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, categories(name), product_variants(count), product_images(public_url, position)')
+    .order('created_at', { ascending: false })
   if (error) throw error
-  return data as (ProductRow & { categories: { name: string } | null })[]
+  return data as (ProductRow & {
+    categories: { name: string } | null
+    product_variants: { count: number }[]
+    product_images: { public_url: string; position: number }[]
+  })[]
 }
 
 export async function adminCreateProduct(input: ProductInsert) {
@@ -27,6 +34,20 @@ export async function adminUpdateProduct(id: string, patch: Partial<ProductInser
 
 export async function adminDeleteProduct(id: string) {
   const { error } = await supabase.from('products').delete().eq('id', id)
+  if (error) throw error
+}
+
+export async function adminUploadProductImage(productId: string, file: File) {
+  const path = `${productId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+  const { error: uploadError } = await supabase.storage.from('product-images').upload(path, file)
+  if (uploadError) throw uploadError
+  const { data: publicUrl } = supabase.storage.from('product-images').getPublicUrl(path)
+  const { error } = await supabase.from('product_images').insert({
+    product_id: productId,
+    storage_path: path,
+    public_url: publicUrl.publicUrl,
+    position: 0,
+  })
   if (error) throw error
 }
 

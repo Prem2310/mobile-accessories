@@ -3,8 +3,9 @@ import { formatINR } from './format'
 
 /**
  * WhatsApp click-to-chat (`wa.me`) only pre-fills text — there's no parameter for attaching a
- * file — so every message includes a link (product page, and photo URL once Storage exists in
- * Phase 5) instead of an attachment. This is the ordering flow: no on-site checkout.
+ * file — so every message includes a link instead of an attachment: the product's photo URL
+ * (Supabase Storage) when one has been uploaded, else the product page. This is the ordering
+ * flow: no on-site checkout.
  */
 export function waLink(phone: string, message: string): string {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
@@ -13,6 +14,10 @@ export function waLink(phone: string, message: string): string {
 function productUrl(slug: string): string {
   if (typeof window === 'undefined') return `/products/${slug}`
   return `${window.location.origin}/products/${slug}`
+}
+
+function photoOrProductUrl(product: Product): string {
+  return product.images?.[0] || productUrl(product.slug)
 }
 
 export function buildProductOrderMessage(
@@ -30,7 +35,7 @@ export function buildProductOrderMessage(
     `Quantity: ${quantity}`,
     `Price: ${formatINR(price * quantity)}`,
     '',
-    `Photo/details: ${productUrl(product.slug)}`,
+    `Photo/details: ${photoOrProductUrl(product)}`,
   ]
   return lines.join('\n')
 }
@@ -40,7 +45,7 @@ export function buildProductEnquiryMessage(settings: SiteSettings, product: Prod
     `Hi ${settings.storeName}, I have a question about:`,
     '',
     `Product: ${product.title}`,
-    `Link: ${productUrl(product.slug)}`,
+    `Link: ${photoOrProductUrl(product)}`,
   ].join('\n')
 }
 

@@ -5,7 +5,7 @@ import { Icon } from '../../components/ds/Icon'
 import { Input } from '../../components/ds/Input'
 import { Select } from '../../components/ds/Select'
 import { loadCatalog } from '../../lib/catalogStore'
-import { adminCreateProduct, adminDeleteProduct, adminListCategories, adminListProducts, adminUpdateProduct } from './adminApi'
+import { adminCreateProduct, adminDeleteProduct, adminListCategories, adminListProducts, adminUpdateProduct, adminUploadProductImage } from './adminApi'
 import type { Database } from '../../lib/database.types'
 
 type Product = Awaited<ReturnType<typeof adminListProducts>>[number]
@@ -53,6 +53,19 @@ export function AdminProductsPage() {
     await loadCatalog()
   }
 
+  const uploadPhoto = async (id: string, file: File) => {
+    setSavingId(id)
+    try {
+      await adminUploadProductImage(id, file)
+      await refresh()
+      await loadCatalog()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setSavingId(null)
+    }
+  }
+
   return (
     <div style={{ padding: 'var(--sp-8)', display: 'grid', gap: 'var(--sp-5)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -81,6 +94,7 @@ export function AdminProductsPage() {
         <table style={{ width: '100%', borderCollapse: 'collapse', font: 'var(--fw-medium) var(--fs-sm)/1.3 var(--font-body)' }}>
           <thead>
             <tr style={{ textAlign: 'left', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-subtle)' }}>
+              <th style={th}>Photo</th>
               <th style={th}>Product</th>
               <th style={th}>Category</th>
               <th style={th}>Price</th>
@@ -93,30 +107,46 @@ export function AdminProductsPage() {
           <tbody>
             {loading && (
               <tr>
-                <td style={td} colSpan={7}>
+                <td style={td} colSpan={8}>
                   Loading…
                 </td>
               </tr>
             )}
             {!loading && products.length === 0 && (
               <tr>
-                <td style={td} colSpan={7}>
+                <td style={td} colSpan={8}>
                   No products yet — add your first one.
                 </td>
               </tr>
             )}
-            {products.map((p) => (
+            {products.map((p) => {
+              const variantCount = p.product_variants?.[0]?.count ?? 0
+              const hasVariants = variantCount > 0
+              return (
               <tr key={p.id} style={{ borderBottom: '1px solid var(--border-subtle)', opacity: savingId === p.id ? 0.5 : 1 }}>
+                <td style={td}>
+                  <PhotoCell product={p} onUpload={(file) => uploadPhoto(p.id, file)} />
+                </td>
                 <td style={td}>
                   <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)', color: 'var(--text-strong)' }}>{p.title}</div>
                   <div style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>{p.slug}</div>
                 </td>
                 <td style={td}>{p.categories?.name ?? '—'}</td>
                 <td style={td}>
-                  <InlineNumber value={p.price} onCommit={(v) => updateField(p.id, { price: v })} prefix="₹" />
+                  {hasVariants ? (
+                    <span style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }} title="This product has variants — each variant has its own price, not editable here yet.">
+                      per variant ({variantCount})
+                    </span>
+                  ) : (
+                    <InlineNumber value={p.price} onCommit={(v) => updateField(p.id, { price: v })} prefix="₹" />
+                  )}
                 </td>
                 <td style={td}>
-                  <InlineNumber value={p.mrp ?? 0} onCommit={(v) => updateField(p.id, { mrp: v || null })} prefix="₹" />
+                  {hasVariants ? (
+                    <span style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>—</span>
+                  ) : (
+                    <InlineNumber value={p.mrp ?? 0} onCommit={(v) => updateField(p.id, { mrp: v || null })} prefix="₹" />
+                  )}
                 </td>
                 <td style={td}>
                   <InlineNumber value={p.stock} onCommit={(v) => updateField(p.id, { stock: v })} />
@@ -135,7 +165,8 @@ export function AdminProductsPage() {
                   </button>
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -145,6 +176,29 @@ export function AdminProductsPage() {
 
 const th: React.CSSProperties = { padding: '10px 16px' }
 const td: React.CSSProperties = { padding: '10px 16px' }
+
+function PhotoCell({ product, onUpload }: { product: Product; onUpload: (file: File) => void }) {
+  const url = [...(product.product_images ?? [])].sort((a, b) => a.position - b.position)[0]?.public_url
+  return (
+    <label style={{ display: 'block', width: 44, height: 44, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-default)', cursor: 'pointer', background: 'var(--gray-100)', flexShrink: 0 }}>
+      {url ? (
+        <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        <span style={{ display: 'grid', placeItems: 'center', width: '100%', height: '100%', color: 'var(--text-faint)', fontSize: 10 }}>Add</span>
+      )}
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) onUpload(file)
+          e.target.value = ''
+        }}
+      />
+    </label>
+  )
+}
 
 function InlineNumber({ value, onCommit, prefix }: { value: number; onCommit: (v: number) => void; prefix?: string }) {
   const [v, setV] = useState(String(value))
