@@ -1,9 +1,9 @@
-import { categories, offers, products, reviews, siteSettings } from './mockData'
+import { categories, offers, products, reviews, siteSettings } from './catalogStore'
 import type { Category, Offer, Product, Review, SiteSettings } from './types'
 
 /**
  * Data-access seam: every storefront/admin surface reads the catalog through these functions,
- * never straight from `mockData`. Phase 5 swaps the bodies for Supabase queries — callers don't change.
+ * never straight from `catalogStore`. Admin writes call loadCatalog() to refresh the cache.
  */
 
 export function getSiteSettings(): SiteSettings {

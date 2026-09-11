@@ -130,15 +130,13 @@ function Hero({ settings }: { settings: ReturnType<typeof getSiteSettings> }) {
           style={{ display: 'grid', gap: 'var(--sp-5)' }}
         >
           <span style={{ font: 'var(--type-label)', letterSpacing: 'var(--ls-caps)', textTransform: 'uppercase', color: 'var(--orange-400)' }}>
-            {settings.area}
+            {settings.heroEyebrow || settings.area}
           </span>
           <h1 style={{ font: '800 clamp(34px, 5vw, 56px)/1.05 var(--font-display)', color: '#fff', letterSpacing: '-0.02em' }}>
-            Upgrade your phone.
-            <br />
-            Upgrade your style.
+            {settings.heroHeadline || 'Upgrade your phone. Upgrade your style.'}
           </h1>
           <p style={{ font: 'var(--fw-medium) var(--fs-lg)/1.5 var(--font-body)', color: 'var(--navy-200)', maxWidth: 440 }}>
-            Premium cases, chargers and everyday tech essentials — priced honestly, fitted free at our Vastral counter.
+            {settings.heroSubheadline || 'Premium cases, chargers and everyday tech essentials — priced honestly, fitted free at our Vastral counter.'}
           </p>
           <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap' }}>
             <Link to="/shop">

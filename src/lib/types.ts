@@ -78,6 +78,9 @@ export interface SiteSettings {
   whatsappOrderTemplate: string
   whatsappEnquiryTemplate: string
   freeDeliveryThreshold: number
+  heroEyebrow?: string
+  heroHeadline?: string
+  heroSubheadline?: string
 }
 
 export interface HeroContent {

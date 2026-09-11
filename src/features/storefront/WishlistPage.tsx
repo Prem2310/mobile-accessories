@@ -3,13 +3,13 @@ import { Breadcrumbs } from '../../components/ds/Breadcrumbs'
 import { Button } from '../../components/ds/Button'
 import { Icon } from '../../components/ds/Icon'
 import { SectionHeading } from '../../components/ds/SectionHeading'
-import { products } from '../../lib/mockData'
+import { getProducts } from '../../lib/catalog'
 import { useWishlistStore } from '../../store/wishlist'
 import { ProductGrid } from './ProductGrid'
 
 export function WishlistPage() {
   const productIds = useWishlistStore((s) => s.productIds)
-  const items = products.filter((p) => productIds.includes(p.id))
+  const items = getProducts().filter((p) => productIds.includes(p.id))
 
   return (
     <div className="container-page py-10" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-6)' }}>
