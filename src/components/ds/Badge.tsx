@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 
-export type BadgeTone = 'sale' | 'new' | 'stock' | 'out' | 'info' | 'warn'
+export type BadgeTone = 'sale' | 'new' | 'trend' | 'stock' | 'out' | 'info' | 'warn'
 
 export interface BadgeProps {
   tone?: BadgeTone
@@ -9,9 +9,12 @@ export interface BadgeProps {
   className?: string
 }
 
+/* "sale"/"new"/"trend" hex values match the reference site's own status-badge colors
+   (Hot #fc5732, New #48d4bb, Trend #83b735), not the app's ink/orange accent tokens. */
 const map: Record<BadgeTone, { bg: string; fg: string }> = {
-  sale: { bg: 'var(--orange-500)', fg: 'var(--white)' },
-  new: { bg: 'var(--navy-800)', fg: 'var(--white)' },
+  sale: { bg: '#fc5732', fg: 'var(--white)' },
+  new: { bg: '#48d4bb', fg: 'var(--white)' },
+  trend: { bg: '#83b735', fg: 'var(--white)' },
   stock: { bg: 'var(--green-100)', fg: 'var(--green-600)' },
   out: { bg: 'var(--red-100)', fg: 'var(--red-600)' },
   info: { bg: 'var(--gray-100)', fg: 'var(--gray-800)' },

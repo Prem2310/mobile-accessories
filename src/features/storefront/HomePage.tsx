@@ -52,10 +52,8 @@ export function HomePage() {
                 to={`/shop?category=${c.slug}`}
                 style={{ display: 'grid', justifyItems: 'center', gap: 'var(--sp-3)', width: 96, textAlign: 'center', textDecoration: 'none' }}
               >
-                <div style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--ink-900)', display: 'grid', placeItems: 'center', transition: 'var(--transition-control)' }}>
-                  <Icon name={c.icon ?? 'package'} size={26} color="#fff" />
-                </div>
-                <div style={{ font: 'var(--fw-semibold) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
+                <Icon name={c.icon ?? 'package'} size={30} color="var(--ink-900)" />
+                <div style={{ font: 'var(--fw-medium) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
               </Link>
             </motion.div>
           ))}
@@ -90,7 +88,7 @@ export function HomePage() {
           </Reveal>
           {offers.map((o) => (
             <Reveal key={o.id}>
-              <OfferBanner title={o.title} subtitle={o.subtitle} tone={o.tone} cta={o.ctaHref ? <Link to={o.ctaHref}><Button variant={o.tone === 'navy' ? 'primary' : 'secondary'}>{o.ctaLabel}</Button></Link> : undefined} />
+              <OfferBanner title={o.title} subtitle={o.subtitle} tone={o.tone} cta={o.ctaHref ? <Link to={o.ctaHref}><Button variant="ghost" style={{ background: '#fff', color: 'var(--ink-900)' }}>{o.ctaLabel}</Button></Link> : undefined} />
             </Reveal>
           ))}
         </section>

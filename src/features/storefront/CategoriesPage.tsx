@@ -29,9 +29,7 @@ export function CategoriesPage() {
               transition: 'var(--transition-control)',
             }}
           >
-            <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-pill)', background: 'var(--ink-900)', display: 'grid', placeItems: 'center' }}>
-              <Icon name={c.icon ?? 'package'} size={26} color="#fff" />
-            </div>
+            <Icon name={c.icon ?? 'package'} size={30} color="var(--ink-900)" />
             <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
             <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)' }}>{getCategoryProductCount(c.id)} products</div>
           </Link>

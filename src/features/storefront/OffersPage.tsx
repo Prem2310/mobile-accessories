@@ -21,10 +21,10 @@ export function OffersPage() {
             cta={
               o.ctaHref ? (
                 <Link to={o.ctaHref}>
-                  <Button variant={o.tone === 'navy' ? 'primary' : 'secondary'}>{o.ctaLabel}</Button>
+                  <Button variant="ghost" style={{ background: '#fff', color: 'var(--ink-900)' }}>{o.ctaLabel}</Button>
                 </Link>
               ) : o.ctaLabel ? (
-                <Button variant={o.tone === 'navy' ? 'primary' : 'secondary'}>{o.ctaLabel}</Button>
+                <Button variant="ghost" style={{ background: '#fff', color: 'var(--ink-900)' }}>{o.ctaLabel}</Button>
               ) : undefined
             }
           />

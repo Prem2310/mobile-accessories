@@ -40,21 +40,21 @@ const sizes: Record<ButtonSize, CSSProperties> = {
   lg: { height: 'var(--control-lg)', padding: '0 var(--sp-8)', fontSize: 'var(--fs-lg)' },
 }
 const variants: Record<ButtonVariant, CSSProperties> = {
-  primary: { background: 'var(--ink-900)', color: 'var(--white)' },
-  secondary: { background: 'transparent', color: 'var(--ink-900)', borderColor: 'var(--ink-900)' },
+  primary: { background: 'transparent', color: 'var(--ink-900)', borderColor: 'var(--ink-900)' },
+  secondary: { background: 'var(--ink-900)', color: 'var(--white)' },
   outline: { background: 'transparent', color: 'var(--ink-900)', borderColor: 'var(--ink-900)' },
   ghost: { background: 'transparent', color: 'var(--ink-900)' },
   whatsapp: { background: 'var(--whatsapp)', color: 'var(--white)' },
 }
 const hovers: Record<ButtonVariant, CSSProperties> = {
-  primary: { background: 'var(--ink-700)' },
-  secondary: { background: 'var(--ink-900)', color: 'var(--white)' },
+  primary: { background: 'var(--ink-900)', color: 'var(--white)' },
+  secondary: { background: 'var(--ink-700)' },
   outline: { background: 'var(--gray-50)' },
   ghost: { background: 'var(--gray-100)' },
   whatsapp: { background: 'var(--whatsapp-dark)' },
 }
 
-/** Primary action control. Black pill = buy/act (Ecomus-style monochrome chrome), outlined = secondary, WhatsApp green = order-on-chat — the one functional color exception. */
+/** Primary action control. Outline pill (black border/text) = the dominant Ecomus CTA style, fills solid black on hover; secondary is solid black by default; WhatsApp green = order-on-chat, the one functional color exception. */
 export function Button({
   variant = 'primary',
   size = 'md',
