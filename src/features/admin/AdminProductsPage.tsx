@@ -27,6 +27,10 @@ export function AdminProductsPage() {
   const [showForm, setShowForm] = useState(false)
   const [savingId, setSavingId] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('')
+  const [stockFilter, setStockFilter] = useState<'all' | 'out' | 'low'>('all')
+  const [publishedFilter, setPublishedFilter] = useState<'all' | 'live' | 'hidden'>('all')
 
   const refresh = async () => {
     setLoading(true)
@@ -55,6 +59,16 @@ export function AdminProductsPage() {
     await loadCatalog()
   }
 
+  const filteredProducts = products.filter((p) => {
+    if (search && !p.title.toLowerCase().includes(search.toLowerCase()) && !p.slug.toLowerCase().includes(search.toLowerCase())) return false
+    if (categoryFilter && p.category_id !== categoryFilter) return false
+    if (stockFilter === 'out' && p.stock > 0) return false
+    if (stockFilter === 'low' && !(p.stock > 0 && p.stock <= 5)) return false
+    if (publishedFilter === 'live' && !p.published) return false
+    if (publishedFilter === 'hidden' && p.published) return false
+    return true
+  })
+
   return (
     <div style={{ padding: 'var(--sp-8)', display: 'grid', gap: 'var(--sp-5)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -79,6 +93,36 @@ export function AdminProductsPage() {
         />
       )}
 
+      <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Input placeholder="Search by title or slug…" value={search} onChange={(e) => setSearch(e.target.value)} style={{ minWidth: 220 }} />
+        <Select
+          options={[{ value: '', label: 'All categories' }, ...categories.map((c) => ({ value: c.id, label: c.name }))]}
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        />
+        <Select
+          options={[
+            { value: 'all', label: 'All stock' },
+            { value: 'low', label: 'Low stock (≤5)' },
+            { value: 'out', label: 'Out of stock' },
+          ]}
+          value={stockFilter}
+          onChange={(e) => setStockFilter(e.target.value as typeof stockFilter)}
+        />
+        <Select
+          options={[
+            { value: 'all', label: 'All visibility' },
+            { value: 'live', label: 'Live only' },
+            { value: 'hidden', label: 'Hidden only' },
+          ]}
+          value={publishedFilter}
+          onChange={(e) => setPublishedFilter(e.target.value as typeof publishedFilter)}
+        />
+        <span style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)' }}>
+          {filteredProducts.length} of {products.length}
+        </span>
+      </div>
+
       <div style={{ background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', font: 'var(--fw-medium) var(--fs-sm)/1.3 var(--font-body)' }}>
           <thead>
@@ -101,14 +145,14 @@ export function AdminProductsPage() {
                 </td>
               </tr>
             )}
-            {!loading && products.length === 0 && (
+            {!loading && filteredProducts.length === 0 && (
               <tr>
                 <td style={td} colSpan={8}>
-                  No products yet — add your first one.
+                  {products.length === 0 ? 'No products yet — add your first one.' : 'No products match these filters.'}
                 </td>
               </tr>
             )}
-            {products.map((p) => {
+            {filteredProducts.map((p) => {
               const variantCount = p.product_variants?.[0]?.count ?? 0
               const hasVariants = variantCount > 0
               return (

@@ -4,6 +4,7 @@ import { Checkbox } from '../../components/ds/Checkbox'
 import { Icon } from '../../components/ds/Icon'
 import { Input } from '../../components/ds/Input'
 import { Select } from '../../components/ds/Select'
+import { getCompatibilityOptions } from '../../lib/catalog'
 import type { Database } from '../../lib/database.types'
 import {
   adminCreateVariant,
@@ -209,9 +210,16 @@ export function ProductEditorPanel({
                 <Input label="Brand" value={product.brand ?? ''} onChange={(e) => set('brand', e.target.value || null)} />
                 <Input
                   label="Compatibility (comma-separated)"
+                  hint="Reuse existing values (e.g. “iPhone 15”) so the storefront filter groups them together."
+                  list="compatibility-options"
                   value={(product.compatibility ?? []).join(', ')}
                   onChange={(e) => set('compatibility', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
                 />
+                <datalist id="compatibility-options">
+                  {getCompatibilityOptions().map((m) => (
+                    <option key={m} value={m} />
+                  ))}
+                </datalist>
                 <label>
                   <span style={labelStyle}>Short description</span>
                   <Input value={product.short_description ?? ''} onChange={(e) => set('short_description', e.target.value || null)} />

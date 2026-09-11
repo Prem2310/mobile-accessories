@@ -25,7 +25,9 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 
 ## What's built
 
-- **Storefront**: home (3D hero + fallback), shop/category/product pages with filters, cart drawer, wishlist — all `localStorage`, no login for customers.
+- **Storefront**: home (3D hero + fallback), shop/category/product pages, cart drawer, wishlist — all `localStorage`, no login for customers.
+- **Shop filters**: in-stock, on-discount, price range, rating, brand, and "Compatible with" (phone model — derived from `products.compatibility`, e.g. filtering "iPhone 15" shows every case/glass listed for it). All state lives in the URL (`?model=iPhone+15`), so filtered views are shareable and back-button-safe. Desktop shows a sticky sidebar; mobile gets a "Filters" button opening a bottom sheet (there was no way to filter on mobile before today).
+- **Admin products filtering**: search by title/slug, filter by category, stock level (low/out), and visibility, above the products table — this was the "manage products is hard, no filter" gap.
 - **Product gallery**: PDP shows a main photo + thumbnail strip for products with multiple images; thumbnails swap the main image on click.
 - **WhatsApp-only ordering**: "Order on WhatsApp" and "Send cart to WhatsApp" build a pre-filled `wa.me` message. If a product has an uploaded photo, the message links straight to it (Supabase Storage URL); otherwise it links to the product page.
 - **Admin dashboard** (`/admin`, code-split from the storefront bundle):
@@ -40,6 +42,10 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 - **Admin editor clobbering unsaved edits**: uploading a photo, adding a variant, or editing a variant field used to re-fetch the whole product row and silently wipe out anything typed into Basic/Pricing/Flags that hadn't been saved yet. Variant/image actions now only refresh those two lists, not the rest of the form.
 - **Editor panel horizontal scroll**: fixed-width grids in the variant row and pricing row could force the whole slide-over to scroll sideways on narrow widths, hiding fields. Now responsive (`auto-fit`) and the scroll container clips horizontal overflow.
 - **Variant price display**: products with variants (3 seeded ones) now show "Edit variants (N)" instead of a price/MRP input that silently did nothing — click it to open the full editor.
+
+## On category hierarchy (cases → iPhone → model)
+
+You asked for nested categories like Cases → iPhone → model. The schema already supports one level of nesting (`categories.parent_id`, unused), but modeling *model-level* filtering as categories would mean one product needs to live in several categories at once (one case fits 4+ iPhone models) — the schema is one category per product, so that breaks. Instead this is now a **filter facet**: `compatibility` on each product (already existed, now surfaced as "Compatible with" checkboxes in Shop filters, sourced live from what's on real products — no separate taxonomy to maintain). Category stays flat (Phone Cases, Screen Protectors, …); model/brand narrow within it. If the flat category list ever gets long enough to need visual grouping (not filtering), `parent_id` is there for that — a separate, smaller change.
 
 ## Known gaps (not started)
 

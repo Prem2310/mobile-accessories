@@ -30,6 +30,8 @@ export interface ProductFilter {
   minRating?: number
   inStockOnly?: boolean
   discountedOnly?: boolean
+  brands?: string[]
+  compatibility?: string[]
   sort?: 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'bestselling' | 'discount'
 }
 
@@ -49,6 +51,8 @@ export function getProducts(filter: ProductFilter = {}): Product[] {
   if (filter.minRating != null) list = list.filter((p) => (p.rating ?? 0) >= filter.minRating!)
   if (filter.inStockOnly) list = list.filter((p) => p.stock > 0)
   if (filter.discountedOnly) list = list.filter((p) => p.mrp && p.mrp > p.price)
+  if (filter.brands?.length) list = list.filter((p) => p.brand && filter.brands!.includes(p.brand))
+  if (filter.compatibility?.length) list = list.filter((p) => filter.compatibility!.some((m) => p.compatibility?.includes(m)))
 
   switch (filter.sort) {
     case 'newest':
@@ -101,7 +105,12 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 }
 
 export function getBrands(): string[] {
-  return Array.from(new Set(products.map((p) => p.brand).filter((b): b is string => Boolean(b))))
+  return Array.from(new Set(products.map((p) => p.brand).filter((b): b is string => Boolean(b)))).sort()
+}
+
+/** Distinct compatibility values across all products — e.g. "iPhone 15", "Samsung S24" — used as filter facets and as autocomplete suggestions in the admin product editor. */
+export function getCompatibilityOptions(): string[] {
+  return Array.from(new Set(products.flatMap((p) => p.compatibility ?? []))).sort()
 }
 
 export function getReviewsForProduct(productId: string): Review[] {
