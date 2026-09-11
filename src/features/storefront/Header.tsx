@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Icon } from '../../components/ds/Icon'
 import { IconButton } from '../../components/ds/IconButton'
-import { SearchBar } from '../../components/ds/SearchBar'
 import { getCategories, getSiteSettings } from '../../lib/catalog'
 import { useCartCount, useCartStore } from '../../store/cart'
 import { useWishlistStore } from '../../store/wishlist'
 import { MobileMenu } from './MobileMenu'
+import { SearchOverlay } from './SearchOverlay'
 
 const NAV_LINKS = [
   { to: '/shop', label: 'Shop', hasDropdown: true },
@@ -18,11 +18,9 @@ const NAV_LINKS = [
 export function Header() {
   const settings = getSiteSettings()
   const categories = getCategories()
-  const [query, setQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shopOpen, setShopOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const navigate = useNavigate()
   const cartCount = useCartCount()
   const wishlistCount = useWishlistStore((s) => s.productIds.length)
   const openCart = useCartStore((s) => s.open)
@@ -99,8 +97,8 @@ export function Header() {
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifySelf: 'end', gridColumn: 3 }}>
-            <IconButton label="Search" tone="neutral" onClick={() => setSearchOpen((v) => !v)}>
-              <Icon name={searchOpen ? 'x' : 'search'} />
+            <IconButton label="Search" tone="neutral" onClick={() => setSearchOpen(true)}>
+              <Icon name="search" />
             </IconButton>
             <Link to="/wishlist" style={{ position: 'relative' }}>
               <IconButton label="Wishlist" tone="neutral">
@@ -117,22 +115,9 @@ export function Header() {
           </div>
         </div>
 
-        {searchOpen && (
-          <div className="container-page" style={{ padding: '0 var(--gutter) var(--sp-4)' }}>
-            <SearchBar
-              placeholder="Search by phone model…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onSubmit={(v) => {
-                navigate(`/shop?q=${encodeURIComponent(v ?? '')}`)
-                setSearchOpen(false)
-              }}
-              style={{ maxWidth: 480, margin: '0 auto' }}
-            />
-          </div>
-        )}
       </header>
 
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} categories={categories} settings={settings} />
     </>
   )
