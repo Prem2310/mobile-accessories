@@ -117,35 +117,64 @@ export function HomePage() {
   )
 }
 
+const heroStagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+}
+const heroItem = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.2, 0.8, 0.3, 1] as const } },
+}
+
 function Hero({ settings }: { settings: ReturnType<typeof getSiteSettings> }) {
   const reduce = useReducedMotion()
   return (
-    <section style={{ position: 'relative', background: 'linear-gradient(135deg, var(--navy-900), var(--navy-800) 60%, var(--navy-700))', overflow: 'hidden' }}>
-      {!reduce && <AnimatedGradientBlobs />}
-      <div className="container-page" style={{ position: 'relative', padding: 'var(--sp-16) var(--gutter) var(--sp-20)', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--sp-10)', alignItems: 'center' }}>
-        <motion.div
-          initial={reduce ? undefined : { opacity: 0, y: 30 }}
-          animate={reduce ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.2, 0.8, 0.3, 1] }}
-          style={{ display: 'grid', gap: 'var(--sp-5)' }}
-        >
-          <span style={{ font: 'var(--type-label)', letterSpacing: 'var(--ls-caps)', textTransform: 'uppercase', color: 'var(--orange-400)' }}>
-            {settings.heroEyebrow || settings.area}
-          </span>
-          <h1 style={{ font: '800 clamp(34px, 5vw, 56px)/1.05 var(--font-display)', color: '#fff', letterSpacing: '-0.02em' }}>
-            {settings.heroHeadline || 'Upgrade your phone. Upgrade your style.'}
-          </h1>
-          <p style={{ font: 'var(--fw-medium) var(--fs-lg)/1.5 var(--font-body)', color: 'var(--navy-200)', maxWidth: 440 }}>
-            {settings.heroSubheadline || 'Premium cases, chargers and everyday tech essentials — priced honestly, fitted free at our Vastral counter.'}
-          </p>
-          <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap' }}>
+    <section style={{ position: 'relative', background: 'linear-gradient(160deg, var(--navy-900), var(--navy-800) 55%, var(--navy-900))', overflow: 'hidden' }}>
+      {/* one still glow, seated behind where the product cluster sits — not drifting blobs */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '4%',
+          width: 560,
+          height: 560,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(242,106,0,.22), transparent 68%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{ position: 'absolute', inset: 0, opacity: 0.5, pointerEvents: 'none', background: 'radial-gradient(ellipse at 20% 100%, rgba(43,79,160,.25), transparent 55%)' }}
+      />
+
+      <motion.div
+        className="container-page"
+        initial={reduce ? undefined : 'hidden'}
+        animate={reduce ? undefined : 'show'}
+        variants={reduce ? undefined : heroStagger}
+        style={{ position: 'relative', padding: 'var(--sp-16) var(--gutter) var(--sp-20)', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--sp-10)', alignItems: 'center' }}
+      >
+        <div style={{ display: 'grid', gap: 'var(--sp-5)' }}>
+          <motion.div variants={reduce ? undefined : heroItem} style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--sp-2)', width: 'fit-content', padding: '6px 14px 6px 10px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.14)' }}>
+            <Icon name="map-pin" size={14} color="var(--orange-400)" />
+            <span style={{ font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)', color: 'var(--navy-100)' }}>
+              {settings.area} · {settings.hours}
+            </span>
+          </motion.div>
+
+          <motion.h1 variants={reduce ? undefined : heroItem} style={{ font: '800 clamp(36px, 4.6vw, 58px)/1.06 var(--font-display)', color: '#fff', letterSpacing: '-0.02em', maxWidth: 560 }}>
+            {settings.heroHeadline || 'Cases, chargers and earbuds — fitted while you wait.'}
+          </motion.h1>
+
+          <motion.p variants={reduce ? undefined : heroItem} style={{ font: 'var(--fw-medium) var(--fs-lg)/1.55 var(--font-body)', color: 'var(--navy-200)', maxWidth: 440 }}>
+            {settings.heroSubheadline || "The same stock we keep at the counter — order here, or message us on WhatsApp and we'll have it ready."}
+          </motion.p>
+
+          <motion.div variants={reduce ? undefined : heroItem} style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap', paddingTop: 'var(--sp-2)' }}>
             <Link to="/shop">
               <Button size="lg">Shop now</Button>
-            </Link>
-            <Link to="/categories">
-              <Button size="lg" variant="outline" style={{ color: '#fff', borderColor: 'rgba(255,255,255,.35)' }}>
-                Browse categories
-              </Button>
             </Link>
             <Button
               as="a"
@@ -156,31 +185,16 @@ function Hero({ settings }: { settings: ReturnType<typeof getSiteSettings> }) {
               rel="noreferrer"
               iconLeft={<Icon name="message-circle" size={18} />}
             >
-              WhatsApp us
+              Message on WhatsApp
             </Button>
-          </div>
+          </motion.div>
+        </div>
+
+        <motion.div variants={reduce ? undefined : heroItem}>
+          <HeroScene />
         </motion.div>
-
-        <HeroScene />
-      </div>
+      </motion.div>
     </section>
-  )
-}
-
-function AnimatedGradientBlobs() {
-  return (
-    <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-      <motion.div
-        animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'absolute', top: '-10%', right: '-5%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(242,106,0,.28), transparent 70%)' }}
-      />
-      <motion.div
-        animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'absolute', bottom: '-15%', left: '10%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(43,79,160,.35), transparent 70%)' }}
-      />
-    </div>
   )
 }
 
