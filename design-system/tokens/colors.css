@@ -18,8 +18,8 @@
   --text-strong:var(--navy-800);--text-body:var(--gray-800);--text-muted:var(--gray-600);
   --text-faint:var(--gray-400);--text-on-brand:var(--white);--text-on-dark:var(--white);
   --text-link:var(--orange-600);--text-link-hover:var(--orange-700);
-  --surface-page:var(--gray-50);--surface-card:var(--white);--surface-sunken:var(--gray-100);
-  --surface-dark:var(--navy-800);--surface-dark-alt:var(--navy-900);--surface-accent:var(--orange-50);
+  --surface-page:var(--white);--surface-card:var(--white);--surface-sunken:var(--gray-50);
+  --surface-dark:var(--navy-900);--surface-dark-alt:var(--navy-800);--surface-accent:var(--orange-50);
   --border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--navy-800);
   --border-brand:var(--orange-500);
   --price:var(--navy-800);--price-strike:var(--gray-400);--save:var(--green-600);

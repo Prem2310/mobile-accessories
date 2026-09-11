@@ -25,7 +25,7 @@ export function Header() {
 
   return (
     <>
-      <div className="hidden md:block" style={{ background: 'var(--navy-900)', color: 'var(--navy-200)' }}>
+      <div className="hidden md:block" style={{ background: 'var(--gray-50)', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="container-page" style={{ display: 'flex', justifyContent: 'space-between', gap: 16, padding: '9px var(--gutter)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
             <Icon name="map-pin" size={13} />
@@ -44,13 +44,13 @@ export function Header() {
         </div>
       </div>
 
-      <header style={{ position: 'sticky', top: 0, zIndex: 30, background: 'var(--surface-dark)', boxShadow: 'var(--shadow-sticky)' }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 30, background: 'var(--white)', borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="container-page" style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-6)', padding: 'var(--sp-4) var(--gutter)' }}>
           <Link to="/" style={{ textDecoration: 'none' }}>
-            <div style={{ font: '800 26px/1 var(--font-display)', color: '#fff', letterSpacing: '-.02em' }}>
+            <div style={{ font: '800 26px/1 var(--font-display)', color: 'var(--navy-900)', letterSpacing: '-.02em' }}>
               Ragh<span style={{ color: 'var(--orange-500)' }}>a</span>v
             </div>
-            <div style={{ font: 'var(--fw-bold) 9px/1 var(--font-body)', letterSpacing: 'var(--ls-caps)', color: 'var(--navy-200)', textTransform: 'uppercase', marginTop: 4 }}>
+            <div style={{ font: 'var(--fw-bold) 9px/1 var(--font-body)', letterSpacing: 'var(--ls-caps)', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: 4 }}>
               Mobile Accessories
             </div>
           </Link>
@@ -66,7 +66,7 @@ export function Header() {
 
           <nav className="hidden lg:flex" style={{ gap: 'var(--sp-5)', marginLeft: 'auto' }}>
             {NAV_LINKS.map((l) => (
-              <Link key={l.label} to={l.to} style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--navy-200)', textDecoration: 'none', padding: '8px 0' }}>
+              <Link key={l.label} to={l.to} style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-body)', textDecoration: 'none', padding: '8px 0' }}>
                 {l.label}
               </Link>
             ))}
@@ -74,13 +74,13 @@ export function Header() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }} className="lg:ml-0">
             <Link to="/wishlist" style={{ position: 'relative' }}>
-              <IconButton label="Wishlist" tone="onDark">
+              <IconButton label="Wishlist" tone="neutral">
                 <Icon name="heart" />
               </IconButton>
               {wishlistCount > 0 && <CountBadge value={wishlistCount} />}
             </Link>
             <span style={{ position: 'relative' }}>
-              <IconButton label="Cart" tone="onDark" onClick={openCart}>
+              <IconButton label="Cart" tone="neutral" onClick={openCart}>
                 <Icon name="shopping-bag" />
               </IconButton>
               {cartCount > 0 && <CountBadge value={cartCount} />}
