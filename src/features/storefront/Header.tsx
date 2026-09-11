@@ -6,6 +6,7 @@ import { SearchBar } from '../../components/ds/SearchBar'
 import { getCategories, getSiteSettings } from '../../lib/catalog'
 import { useCartCount, useCartStore } from '../../store/cart'
 import { useWishlistStore } from '../../store/wishlist'
+import { MobileMenu } from './MobileMenu'
 
 const NAV_LINKS = [
   { to: '/shop', label: 'Shop', hasDropdown: true },
@@ -20,6 +21,7 @@ export function Header() {
   const [query, setQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shopOpen, setShopOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const cartCount = useCartCount()
   const wishlistCount = useWishlistStore((s) => s.productIds.length)
@@ -48,6 +50,15 @@ export function Header() {
 
       <header style={{ position: 'sticky', top: 0, zIndex: 30, background: 'var(--white)', borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="container-page" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 'var(--sp-4)', padding: 'var(--sp-4) var(--gutter)' }}>
+          <button
+            className="flex lg:hidden"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            style={{ gridColumn: 1, justifySelf: 'start', border: 0, background: 'none', cursor: 'pointer', padding: 8, marginLeft: -8 }}
+          >
+            <Icon name="menu" size={22} color="var(--ink-900)" />
+          </button>
+
           <nav className="hidden lg:flex" style={{ gap: 'var(--sp-5)', gridColumn: 1 }}>
             {NAV_LINKS.map((l) =>
               l.hasDropdown ? (
@@ -121,6 +132,8 @@ export function Header() {
           </div>
         )}
       </header>
+
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} categories={categories} settings={settings} />
     </>
   )
 }
