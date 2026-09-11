@@ -4,7 +4,7 @@ import { Button } from '../../components/ds/Button'
 import { Icon } from '../../components/ds/Icon'
 import { OfferBanner } from '../../components/ds/OfferBanner'
 import { SectionHeading } from '../../components/ds/SectionHeading'
-import { getActiveOffers, getBestsellers, getCategories, getFeaturedProducts, getNewArrivals, getSiteSettings } from '../../lib/catalog'
+import { getActiveOffers, getBestsellers, getCategories, getFeaturedProducts, getNewArrivals, getProducts, getSiteSettings } from '../../lib/catalog'
 import { buildGeneralEnquiryMessage, waLink } from '../../lib/whatsapp'
 import { HeroCarousel } from './HeroCarousel'
 import { HotDeals, TestimonialSection } from './HotDeals'
@@ -43,17 +43,17 @@ export function HomePage() {
 
       <section className="container-page">
         <Reveal>
-          <SectionHeading title="Shop by category" action={<Link to="/categories" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>View all</Link>} />
+          <SectionHeading title="Shop by category" align="center" />
         </Reveal>
-        <div style={{ display: 'flex', gap: 'var(--sp-6)', overflowX: 'auto', paddingBottom: 'var(--sp-2)' }}>
+        <div style={{ display: 'flex', gap: 'var(--sp-6)', overflowX: 'auto', paddingBottom: 'var(--sp-2)', justifyContent: 'center' }}>
           {categories.slice(0, 8).map((c, i) => (
             <motion.div key={c.id} initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp} transition={{ delay: i * 0.04 }} style={{ flex: '0 0 auto' }}>
               <Link
                 to={`/shop?category=${c.slug}`}
                 style={{ display: 'grid', justifyItems: 'center', gap: 'var(--sp-3)', width: 96, textAlign: 'center', textDecoration: 'none' }}
               >
-                <div style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--surface-sunken)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', transition: 'var(--transition-control)' }}>
-                  <Icon name={c.icon ?? 'package'} size={26} color="var(--navy-900)" />
+                <div style={{ width: 76, height: 76, borderRadius: '50%', background: 'var(--ink-900)', display: 'grid', placeItems: 'center', transition: 'var(--transition-control)' }}>
+                  <Icon name={c.icon ?? 'package'} size={26} color="#fff" />
                 </div>
                 <div style={{ font: 'var(--fw-semibold) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
               </Link>
@@ -106,7 +106,7 @@ export function HomePage() {
         <Reveal>
           <div style={{ background: 'var(--surface-dark)', borderRadius: 'var(--radius-xl)', padding: 'var(--sp-12) var(--sp-8)', display: 'grid', gap: 'var(--sp-4)', justifyItems: 'center', textAlign: 'center' }}>
             <div style={{ font: 'var(--type-h2)', color: '#fff' }}>Prefer to just chat?</div>
-            <p style={{ color: 'var(--navy-200)', maxWidth: 440 }}>Tell us your phone model on WhatsApp — we'll send prices and photos right away.</p>
+            <p style={{ color: 'var(--gray-300)', maxWidth: 440 }}>Tell us your phone model on WhatsApp — we'll send prices and photos right away.</p>
             <Button
               as="a"
               variant="whatsapp"
@@ -126,23 +126,32 @@ export function HomePage() {
 }
 
 function InstagramSection({ settings }: { settings: ReturnType<typeof getSiteSettings> }) {
+  const photos = getProducts()
+    .flatMap((p) => p.images)
+    .slice(0, 5)
+  const slots: (string | null)[] = [...photos, ...Array.from({ length: Math.max(0, 5 - photos.length) }).map(() => null)]
+
   return (
     <section className="container-page">
       <Reveal>
-        <SectionHeading
-          title="Follow Raghav on Instagram"
-          action={
-            <a href={`https://instagram.com/${settings.instagramHandle.replace('@', '')}`} target="_blank" rel="noreferrer" style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-link)' }}>
-              {settings.instagramHandle}
-            </a>
-          }
-        />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--sp-3)' }}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} style={{ aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-md)', display: 'grid', placeItems: 'center', border: '1px dashed var(--navy-200)' }}>
-              <Icon name="instagram" size={20} color="var(--gray-400)" />
-            </div>
-          ))}
+        <div style={{ textAlign: 'center', marginBottom: 'var(--sp-6)' }}>
+          <h2 style={{ font: '800 clamp(22px, 2.6vw, 30px)/1.15 var(--font-display)' }}>Shop Gram</h2>
+          <a href={`https://instagram.com/${settings.instagramHandle.replace('@', '')}`} target="_blank" rel="noreferrer" style={{ display: 'inline-block', marginTop: 6, font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-muted)', textDecoration: 'none' }}>
+            Follow {settings.instagramHandle} for what's new in store
+          </a>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 2 }}>
+          {slots.map((src, i) =>
+            src ? (
+              <div key={i} style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
+                <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+              </div>
+            ) : (
+              <div key={i} style={{ aspectRatio: '1/1', background: 'var(--surface-sunken)', display: 'grid', placeItems: 'center', border: '1px dashed var(--border-default)' }}>
+                <Icon name="instagram" size={20} color="var(--gray-400)" />
+              </div>
+            )
+          )}
         </div>
       </Reveal>
     </section>

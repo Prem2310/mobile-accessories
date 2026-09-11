@@ -31,53 +31,56 @@ function ImageCarousel({ banners, settings }: { banners: ReturnType<typeof getHe
   const go = (dir: -1 | 1) => setIndex((i) => (i + dir + banners.length) % banners.length)
 
   return (
-    <section style={{ position: 'relative', background: 'var(--surface-page)' }}>
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 560, overflow: 'hidden' }} className="md:aspect-[21/9]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={banner.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            style={{ position: 'absolute', inset: 0 }}
-          >
-            <picture>
-              {banner.imageMobile && <source media="(max-width: 767px)" srcSet={banner.imageMobile} />}
-              <img
-                src={banner.imageDesktop || banner.imageMobile}
-                alt={banner.title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </picture>
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg, rgba(6,23,56,.55), transparent 45%)' }} />
-            <div className="container-page" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 'var(--sp-8) var(--gutter) var(--sp-8)' }}>
-              <h1 style={{ font: '800 clamp(24px, 3.4vw, 38px)/1.15 var(--font-display)', color: '#fff', maxWidth: 520 }}>{banner.title}</h1>
-              {banner.description && <p style={{ marginTop: 'var(--sp-2)', font: 'var(--fw-medium) var(--fs-md)/1.4 var(--font-body)', color: 'var(--navy-100)', maxWidth: 460 }}>{banner.description}</p>}
-              {banner.ctaLabel && banner.ctaHref && (
-                <Link to={banner.ctaHref} style={{ display: 'inline-block', marginTop: 'var(--sp-4)' }}>
-                  <Button>{banner.ctaLabel}</Button>
-                </Link>
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+    <section style={{ position: 'relative', background: 'var(--gray-50)' }}>
+      {/* Inset carousel with visible side margins (not full-bleed) — arrows sit in that margin, matching the reference's framed-carousel look rather than an edge-to-edge hero banner. */}
+      <div style={{ position: 'relative', maxWidth: 1160, margin: '0 auto', padding: '0 64px' }}>
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, overflow: 'hidden' }} className="md:aspect-[21/9]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={banner.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              style={{ position: 'absolute', inset: 0 }}
+            >
+              <picture>
+                {banner.imageMobile && <source media="(max-width: 767px)" srcSet={banner.imageMobile} />}
+                <img
+                  src={banner.imageDesktop || banner.imageMobile}
+                  alt={banner.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </picture>
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg, rgba(0,0,0,.55), transparent 45%)' }} />
+              <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 'var(--sp-8)' }}>
+                <h1 style={{ font: '800 clamp(24px, 3.4vw, 38px)/1.15 var(--font-display)', color: '#fff', maxWidth: 520 }}>{banner.title}</h1>
+                {banner.description && <p style={{ marginTop: 'var(--sp-2)', font: 'var(--fw-medium) var(--fs-md)/1.4 var(--font-body)', color: 'var(--gray-200)', maxWidth: 460 }}>{banner.description}</p>}
+                {banner.ctaLabel && banner.ctaHref && (
+                  <Link to={banner.ctaHref} style={{ display: 'inline-block', marginTop: 'var(--sp-4)' }}>
+                    <Button>{banner.ctaLabel}</Button>
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {banners.length > 1 && (
           <>
             <button onClick={() => go(-1)} aria-label="Previous banner" style={arrowStyle('left')}>
-              <Icon name="chevron-left" size={20} color="var(--navy-800)" />
+              <Icon name="chevron-left" size={20} color="var(--ink-900)" />
             </button>
             <button onClick={() => go(1)} aria-label="Next banner" style={arrowStyle('right')}>
-              <Icon name="chevron-right" size={20} color="var(--navy-800)" />
+              <Icon name="chevron-right" size={20} color="var(--ink-900)" />
             </button>
-            <div style={{ position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 'var(--sp-4)' }}>
               {banners.map((b, i) => (
                 <button
                   key={b.id}
                   onClick={() => setIndex(i)}
                   aria-label={`Show banner ${i + 1}`}
-                  style={{ width: i === index ? 20 : 6, height: 6, borderRadius: 999, border: 0, cursor: 'pointer', background: i === index ? 'var(--orange-500)' : 'rgba(255,255,255,.6)', transition: 'var(--transition-control)' }}
+                  style={{ width: i === index ? 20 : 6, height: 6, borderRadius: 999, border: 0, cursor: 'pointer', background: i === index ? 'var(--ink-900)' : 'var(--gray-300)', transition: 'var(--transition-control)' }}
                 />
               ))}
             </div>
@@ -151,7 +154,7 @@ function TrustStrip({ settings }: { settings: ReturnType<typeof getSiteSettings>
       <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--sp-5)', padding: 'var(--sp-5) 0' }}>
         {points.map((p) => (
           <div key={p.title} style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'flex-start' }}>
-            <Icon name={p.icon} size={20} color="var(--orange-500)" style={{ marginTop: 2, flexShrink: 0 }} />
+            <Icon name={p.icon} size={20} color="var(--ink-900)" style={{ marginTop: 2, flexShrink: 0 }} />
             <div>
               <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.2 var(--font-body)', color: 'var(--text-strong)' }}>{p.title}</div>
               <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-muted)' }}>{p.body}</div>

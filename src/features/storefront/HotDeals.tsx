@@ -41,18 +41,20 @@ function Countdown({ endsAt }: { endsAt: string }) {
   const seconds = Math.floor((remaining % 60000) / 1000)
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--sp-2)' }}>
-      {[
-        { label: 'Days', value: days },
-        { label: 'Hrs', value: hours },
-        { label: 'Min', value: minutes },
-        { label: 'Sec', value: seconds },
-      ].map((u) => (
-        <div key={u.label} style={{ display: 'grid', justifyItems: 'center', width: 52, padding: '8px 0', borderRadius: 'var(--radius-md)', background: 'var(--navy-900)', color: '#fff' }}>
-          <span style={{ font: '800 20px/1 var(--font-display)' }}>{String(u.value).padStart(2, '0')}</span>
-          <span style={{ font: 'var(--fw-medium) 10px/1.4 var(--font-body)', color: 'var(--navy-200)' }}>{u.label}</span>
-        </div>
-      ))}
+    <div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '8px 16px',
+        borderRadius: 'var(--radius-pill)',
+        background: 'var(--orange-50)',
+        color: 'var(--orange-700)',
+        font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)',
+      }}
+    >
+      <Icon name="clock" size={14} />
+      {String(days).padStart(2, '0')}D : {String(hours).padStart(2, '0')}H : {String(minutes).padStart(2, '0')}M : {String(seconds).padStart(2, '0')}S
     </div>
   )
 }
@@ -63,18 +65,18 @@ export function TestimonialSection() {
 
   return (
     <section className="container-page">
-      <div style={{ background: 'var(--navy-900)', borderRadius: 'var(--radius-xl)', padding: 'var(--sp-12) var(--sp-8)', display: 'grid', justifyItems: 'center', gap: 'var(--sp-4)', textAlign: 'center' }}>
-        <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--orange-500)', color: '#fff', display: 'grid', placeItems: 'center', font: '800 20px/1 var(--font-display)' }}>
+      <div style={{ background: 'var(--ink-900)', borderRadius: 'var(--radius-xl)', padding: 'var(--sp-12) var(--sp-8)', display: 'grid', justifyItems: 'center', gap: 'var(--sp-4)', textAlign: 'center' }}>
+        <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--gray-800)', color: '#fff', display: 'grid', placeItems: 'center', font: '800 20px/1 var(--font-display)' }}>
           {review.author.charAt(0)}
         </div>
         <div style={{ display: 'flex', gap: 2 }}>
           {Array.from({ length: 5 }).map((_, i) => (
-            <Icon key={i} name="star" size={16} color={i < review.rating ? 'var(--orange-400)' : 'var(--navy-700)'} />
+            <Icon key={i} name="star" size={16} color={i < review.rating ? 'var(--orange-400)' : 'var(--ink-700)'} />
           ))}
         </div>
         <p style={{ font: '600 clamp(18px, 2.2vw, 24px)/1.5 var(--font-display)', color: '#fff', maxWidth: 560 }}>“{review.comment}”</p>
-        <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--navy-200)' }}>{review.author}, verified customer</div>
-        <Link to="/shop" style={{ marginTop: 'var(--sp-2)', font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--orange-400)', textDecoration: 'none' }}>
+        <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--gray-300)' }}>{review.author}, verified customer</div>
+        <Link to="/shop" style={{ marginTop: 'var(--sp-2)', font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: '#fff', textDecoration: 'none' }}>
           Shop what they bought →
         </Link>
       </div>
