@@ -20,11 +20,12 @@ export function ProductPage() {
   const { slug } = useParams<{ slug: string }>()
   const product = slug ? getProductBySlug(slug) : undefined
   const settings = getSiteSettings()
-  const [variantIndex, setVariantIndex] = useState(0)
+  const [selectedAttrs, setSelectedAttrs] = useState<Record<string, string>>({})
   const [quantity, setQuantity] = useState(1)
   const [tab, setTab] = useState('description')
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   useEffect(() => setActiveImageIndex(0), [product?.id])
+  useEffect(() => setSelectedAttrs(product?.variants?.[0]?.attributes ?? {}), [product?.id])
   const addItem = useCartStore((s) => s.addItem)
   const openCart = useCartStore((s) => s.open)
   const wishlisted = useWishlistStore((s) => s.has(product?.id ?? ''))
@@ -33,7 +34,9 @@ export function ProductPage() {
   const relatedProducts = product ? getRelatedProducts(product) : []
   const reviews = product ? getReviewsForProduct(product.id) : []
 
-  const variant = product?.variants?.[variantIndex]
+  const attributeKeys = product?.variants?.[0] ? Object.keys(product.variants[0].attributes) : []
+  const variant =
+    product?.variants?.find((v) => attributeKeys.every((k) => v.attributes[k] === selectedAttrs[k])) ?? product?.variants?.[0]
   const price = variant?.price ?? product?.price ?? 0
   const mrp = variant?.mrp ?? product?.mrp
   const stock = variant ? variant.stock : (product?.stock ?? 0)
@@ -135,53 +138,85 @@ export function ProductPage() {
             <Badge tone="stock">In stock</Badge>
           )}
 
-          {product.variants && product.variants.length > 0 && (
-            <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-              <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>{product.variantLabel ?? 'Variant'}</div>
-              <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
-                {product.variants.map((v, i) =>
-                  v.swatchHex ? (
-                    <button
-                      key={v.id}
-                      onClick={() => setVariantIndex(i)}
-                      disabled={v.stock <= 0}
-                      aria-label={Object.values(v.attributes).join(', ')}
-                      title={Object.values(v.attributes).join(', ')}
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: '50%',
-                        border: '2px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-subtle)'),
-                        padding: 2,
-                        background: 'var(--white)',
-                        cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',
-                        opacity: v.stock <= 0 ? 0.4 : 1,
-                      }}
-                    >
-                      <span style={{ display: 'block', width: '100%', height: '100%', borderRadius: '50%', background: v.swatchHex }} />
-                    </button>
-                  ) : (
-                    <button
-                      key={v.id}
-                      onClick={() => setVariantIndex(i)}
-                      disabled={v.stock <= 0}
-                      style={{
-                        padding: '0 var(--sp-4)',
-                        height: 'var(--control-sm)',
-                        borderRadius: 'var(--radius-pill)',
-                        border: '1.5px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-default)'),
-                        background: i === variantIndex ? 'var(--gray-50)' : 'var(--white)',
-                        color: v.stock <= 0 ? 'var(--text-faint)' : 'var(--text-strong)',
-                        font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
-                        cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',
-                        textDecoration: v.stock <= 0 ? 'line-through' : 'none',
-                      }}
-                    >
-                      {Object.values(v.attributes).join(', ')}
-                    </button>
-                  )
-                )}
-              </div>
+          {product.variants && product.variants.length > 0 && attributeKeys.length > 0 && (
+            <div style={{ display: 'grid', gap: 'var(--sp-4)' }}>
+              {attributeKeys.map((key) => {
+                const otherKeys = attributeKeys.filter((k) => k !== key)
+                const seenVals = new Set<string>()
+                const values: string[] = []
+                product.variants!.forEach((v) => {
+                  const val = v.attributes[key]
+                  if (!seenVals.has(val)) {
+                    seenVals.add(val)
+                    values.push(val)
+                  }
+                })
+                const isSwatchKey = key.toLowerCase().includes('colour') || key.toLowerCase().includes('color')
+                return (
+                  <div key={key} style={{ display: 'grid', gap: 'var(--sp-2)' }}>
+                    <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>
+                      {key}: <span style={{ fontWeight: 500, color: 'var(--text-muted)' }}>{selectedAttrs[key]}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
+                      {values.map((val) => {
+                        // Exact match against the OTHER currently-selected attributes, if in stock; otherwise
+                        // fall back to any in-stock variant with this value, so picking an option auto-corrects
+                        // the other axis instead of leaving the button permanently disabled.
+                        const exactMatch = product.variants!.find((v) => v.attributes[key] === val && otherKeys.every((k) => v.attributes[k] === selectedAttrs[k]))
+                        const anyInStock = product.variants!.find((v) => v.attributes[key] === val && v.stock > 0)
+                        const representative = (exactMatch && exactMatch.stock > 0 ? exactMatch : anyInStock) ?? exactMatch ?? product.variants!.find((v) => v.attributes[key] === val)!
+                        const available = !!anyInStock
+                        const selected = selectedAttrs[key] === val
+                        const select = () => {
+                          if (!available) return
+                          setSelectedAttrs(representative.attributes)
+                        }
+                        return isSwatchKey && representative.swatchHex ? (
+                          <button
+                            key={val}
+                            onClick={select}
+                            disabled={!available}
+                            aria-label={val}
+                            title={available ? val : `${val} — out of stock`}
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: '50%',
+                              border: '2px solid ' + (selected ? 'var(--ink-900)' : 'var(--border-subtle)'),
+                              padding: 2,
+                              background: 'var(--white)',
+                              cursor: available ? 'pointer' : 'not-allowed',
+                              opacity: available ? 1 : 0.4,
+                            }}
+                          >
+                            <span style={{ display: 'block', width: '100%', height: '100%', borderRadius: '50%', background: representative.swatchHex }} />
+                          </button>
+                        ) : (
+                          <button
+                            key={val}
+                            onClick={select}
+                            disabled={!available}
+                            title={available ? val : `${val} — out of stock`}
+                            style={{
+                              padding: '0 var(--sp-4)',
+                              height: 'var(--control-sm)',
+                              borderRadius: 'var(--radius-pill)',
+                              border: '1.5px solid ' + (selected ? 'var(--ink-900)' : 'var(--border-default)'),
+                              background: selected ? 'var(--gray-50)' : 'var(--white)',
+                              color: available ? 'var(--text-strong)' : 'var(--text-faint)',
+                              font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
+                              cursor: available ? 'pointer' : 'not-allowed',
+                              textDecoration: available ? 'none' : 'line-through',
+                            }}
+                          >
+                            {val}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           )}
 
