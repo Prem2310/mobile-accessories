@@ -8,6 +8,19 @@ type CategoryInsert = Database['public']['Tables']['categories']['Insert']
 type BannerRow = Database['public']['Tables']['banners']['Row']
 type OfferRow = Database['public']['Tables']['offers']['Row']
 type SiteSettingsRow = Database['public']['Tables']['site_settings']['Row']
+type VariantRow = Database['public']['Tables']['product_variants']['Row']
+type VariantInsert = Database['public']['Tables']['product_variants']['Insert']
+type ImageRow = Database['public']['Tables']['product_images']['Row']
+
+export async function adminGetProduct(id: string) {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, product_variants(*), product_images(*)')
+    .eq('id', id)
+    .single()
+  if (error) throw error
+  return data as ProductRow & { product_variants: VariantRow[]; product_images: ImageRow[] }
+}
 
 export async function adminListProducts() {
   const { data, error } = await supabase
@@ -37,7 +50,7 @@ export async function adminDeleteProduct(id: string) {
   if (error) throw error
 }
 
-export async function adminUploadProductImage(productId: string, file: File) {
+export async function adminUploadProductImage(productId: string, file: File, position = 0) {
   const path = `${productId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
   const { error: uploadError } = await supabase.storage.from('product-images').upload(path, file)
   if (uploadError) throw uploadError
@@ -46,8 +59,47 @@ export async function adminUploadProductImage(productId: string, file: File) {
     product_id: productId,
     storage_path: path,
     public_url: publicUrl.publicUrl,
-    position: 0,
+    position,
   })
+  if (error) throw error
+}
+
+export async function adminUploadProductImages(productId: string, files: File[], startPosition = 0) {
+  for (let i = 0; i < files.length; i++) {
+    await adminUploadProductImage(productId, files[i], startPosition + i)
+  }
+}
+
+export async function adminDeleteProductImage(image: { id: string; storage_path: string }) {
+  const { error: storageError } = await supabase.storage.from('product-images').remove([image.storage_path])
+  if (storageError) throw storageError
+  const { error } = await supabase.from('product_images').delete().eq('id', image.id)
+  if (error) throw error
+}
+
+export async function adminSetImagePosition(id: string, position: number) {
+  const { error } = await supabase.from('product_images').update({ position }).eq('id', id)
+  if (error) throw error
+}
+
+export async function adminListVariants(productId: string) {
+  const { data, error } = await supabase.from('product_variants').select('*').eq('product_id', productId).order('created_at')
+  if (error) throw error
+  return data as VariantRow[]
+}
+
+export async function adminCreateVariant(input: VariantInsert) {
+  const { error } = await supabase.from('product_variants').insert(input)
+  if (error) throw error
+}
+
+export async function adminUpdateVariant(id: string, patch: Partial<VariantInsert>) {
+  const { error } = await supabase.from('product_variants').update(patch).eq('id', id)
+  if (error) throw error
+}
+
+export async function adminDeleteVariant(id: string) {
+  const { error } = await supabase.from('product_variants').delete().eq('id', id)
   if (error) throw error
 }
 

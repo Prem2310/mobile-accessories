@@ -5,7 +5,8 @@ import { Icon } from '../../components/ds/Icon'
 import { Input } from '../../components/ds/Input'
 import { Select } from '../../components/ds/Select'
 import { loadCatalog } from '../../lib/catalogStore'
-import { adminCreateProduct, adminDeleteProduct, adminListCategories, adminListProducts, adminUpdateProduct, adminUploadProductImage } from './adminApi'
+import { adminCreateProduct, adminDeleteProduct, adminListCategories, adminListProducts, adminUpdateProduct } from './adminApi'
+import { ProductEditorPanel } from './ProductEditorPanel'
 import type { Database } from '../../lib/database.types'
 
 type Product = Awaited<ReturnType<typeof adminListProducts>>[number]
@@ -25,6 +26,7 @@ export function AdminProductsPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [savingId, setSavingId] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
 
   const refresh = async () => {
     setLoading(true)
@@ -51,19 +53,6 @@ export function AdminProductsPage() {
     await adminDeleteProduct(id)
     await refresh()
     await loadCatalog()
-  }
-
-  const uploadPhoto = async (id: string, file: File) => {
-    setSavingId(id)
-    try {
-      await adminUploadProductImage(id, file)
-      await refresh()
-      await loadCatalog()
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Upload failed')
-    } finally {
-      setSavingId(null)
-    }
   }
 
   return (
@@ -125,18 +114,22 @@ export function AdminProductsPage() {
               return (
               <tr key={p.id} style={{ borderBottom: '1px solid var(--border-subtle)', opacity: savingId === p.id ? 0.5 : 1 }}>
                 <td style={td}>
-                  <PhotoCell product={p} onUpload={(file) => uploadPhoto(p.id, file)} />
+                  <button onClick={() => setEditingId(p.id)} style={{ border: 0, background: 'none', padding: 0, cursor: 'pointer' }} aria-label="Edit product">
+                    <PhotoCell product={p} />
+                  </button>
                 </td>
                 <td style={td}>
-                  <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)', color: 'var(--text-strong)' }}>{p.title}</div>
-                  <div style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>{p.slug}</div>
+                  <button onClick={() => setEditingId(p.id)} style={{ border: 0, background: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}>
+                    <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)', color: 'var(--text-strong)' }}>{p.title}</div>
+                    <div style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>{p.slug}</div>
+                  </button>
                 </td>
                 <td style={td}>{p.categories?.name ?? '—'}</td>
                 <td style={td}>
                   {hasVariants ? (
-                    <span style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }} title="This product has variants — each variant has its own price, not editable here yet.">
-                      per variant ({variantCount})
-                    </span>
+                    <button onClick={() => setEditingId(p.id)} style={{ border: 0, background: 'none', padding: 0, cursor: 'pointer', color: 'var(--orange-600)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>
+                      Edit variants ({variantCount})
+                    </button>
                   ) : (
                     <InlineNumber value={p.price} onCommit={(v) => updateField(p.id, { price: v })} prefix="₹" />
                   )}
@@ -160,9 +153,14 @@ export function AdminProductsPage() {
                   </button>
                 </td>
                 <td style={td}>
-                  <button onClick={() => remove(p.id, p.title)} style={{ border: 0, background: 'transparent', color: 'var(--gray-400)', cursor: 'pointer' }} aria-label="Delete">
-                    <Icon name="trash-2" size={16} />
-                  </button>
+                  <div style={{ display: 'flex', gap: 'var(--sp-2)' }}>
+                    <button onClick={() => setEditingId(p.id)} style={{ border: 0, background: 'transparent', color: 'var(--gray-400)', cursor: 'pointer' }} aria-label="Edit">
+                      <Icon name="pencil" size={16} />
+                    </button>
+                    <button onClick={() => remove(p.id, p.title)} style={{ border: 0, background: 'transparent', color: 'var(--gray-400)', cursor: 'pointer' }} aria-label="Delete">
+                      <Icon name="trash-2" size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
               )
@@ -170,6 +168,18 @@ export function AdminProductsPage() {
           </tbody>
         </table>
       </div>
+
+      {editingId && (
+        <ProductEditorPanel
+          productId={editingId}
+          categories={categories}
+          onClose={() => setEditingId(null)}
+          onSaved={async () => {
+            await refresh()
+            await loadCatalog()
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -177,26 +187,16 @@ export function AdminProductsPage() {
 const th: React.CSSProperties = { padding: '10px 16px' }
 const td: React.CSSProperties = { padding: '10px 16px' }
 
-function PhotoCell({ product, onUpload }: { product: Product; onUpload: (file: File) => void }) {
+function PhotoCell({ product }: { product: Product }) {
   const url = [...(product.product_images ?? [])].sort((a, b) => a.position - b.position)[0]?.public_url
   return (
-    <label style={{ display: 'block', width: 44, height: 44, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-default)', cursor: 'pointer', background: 'var(--gray-100)', flexShrink: 0 }}>
+    <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-default)', background: 'var(--gray-100)', flexShrink: 0 }}>
       {url ? (
         <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       ) : (
         <span style={{ display: 'grid', placeItems: 'center', width: '100%', height: '100%', color: 'var(--text-faint)', fontSize: 10 }}>Add</span>
       )}
-      <input
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={(e) => {
-          const file = e.target.files?.[0]
-          if (file) onUpload(file)
-          e.target.value = ''
-        }}
-      />
-    </label>
+    </div>
   )
 }
 

@@ -26,9 +26,20 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 ## What's built
 
 - **Storefront**: home (3D hero + fallback), shop/category/product pages with filters, cart drawer, wishlist — all `localStorage`, no login for customers.
+- **Product gallery**: PDP shows a main photo + thumbnail strip for products with multiple images; thumbnails swap the main image on click.
 - **WhatsApp-only ordering**: "Order on WhatsApp" and "Send cart to WhatsApp" build a pre-filled `wa.me` message. If a product has an uploaded photo, the message links straight to it (Supabase Storage URL); otherwise it links to the product page.
-- **Admin dashboard** (`/admin`, code-split from the storefront bundle): products (inline price/stock/publish edit, photo upload, add/delete), categories, banners, site settings (store name, WhatsApp number, hero copy).
+- **Admin dashboard** (`/admin`, code-split from the storefront bundle):
+  - Products table: inline price/stock/publish edit for simple products, thumbnail preview, add/delete.
+  - **Full product editor** (click any product row or the pencil icon): title, slug (read-only), category, brand, compatibility, descriptions, pricing/stock, publish/featured/bestseller/new-arrival flags, a multi-photo gallery manager (upload several at once, delete, reorder with arrows), variants (add/edit/delete rows with a single label+value attribute, e.g. "Model" → "iPhone 15", plus per-variant price/MRP/stock), specifications (label/value rows), warranty, delivery info, tags, SEO title/description.
+  - Categories, banners, site settings (store name, WhatsApp number, hero copy) — unchanged from this morning.
 - **Backend**: Supabase Postgres + RLS on every table (public reads published/enabled rows, only `is_admin()` can write), Supabase Storage bucket `product-images` (public-read, admin-only write). All migrations live in `supabase/migrations/` and match the live project 1:1 (`0001`–`0005`).
+
+## Fixed today
+
+- **PDP layout bug** (`localhost:5173/products/dulero-matel-case-for-iphone` and any product with a portrait photo): the image frame had a circular width/aspect-ratio sizing dependency that made the box balloon to ~3x its column width whenever a non-square photo was uploaded. Fixed by giving the frame an explicit `width: 100%` and switching to `object-fit: contain` so portrait/landscape phone photos aren't cropped.
+- **Admin editor clobbering unsaved edits**: uploading a photo, adding a variant, or editing a variant field used to re-fetch the whole product row and silently wipe out anything typed into Basic/Pricing/Flags that hadn't been saved yet. Variant/image actions now only refresh those two lists, not the rest of the form.
+- **Editor panel horizontal scroll**: fixed-width grids in the variant row and pricing row could force the whole slide-over to scroll sideways on narrow widths, hiding fields. Now responsive (`auto-fit`) and the scroll container clips horizontal overflow.
+- **Variant price display**: products with variants (3 seeded ones) now show "Edit variants (N)" instead of a price/MRP input that silently did nothing — click it to open the full editor.
 
 ## Known gaps (not started)
 
@@ -36,12 +47,10 @@ One gotcha if you ever add a second admin/staff account: this Supabase project h
 - **Banner image upload** — `AdminBannersPage` is text/link fields only; no file picker wired.
 - **SEO** — no sitemap.xml, robots.txt, or JSON-LD yet.
 - **Analytics** — nothing to show; there's no `orders` table since checkout is WhatsApp-only. Would need a lightweight "order intent" log if you want numbers.
-- **Mobile admin layout** — the sidebar is a fixed 220px column; it will crush on a phone screen. Fine on desktop/tablet, not yet tested/fixed for a shop owner managing stock from their phone.
-- **Products table on desktop** already scrolls horizontally past ~800px — acceptable but not pretty.
-- **Variant pricing** — 3 seeded products (`matte-silicone-case`, `clear-magsafe-case`, `9h-tempered-glass`) have per-variant prices. The admin products table shows "per variant (N)" instead of a broken editable field for these — there's no variant price editor yet, so change those prices directly in Supabase (`product_variants` table) until one exists.
+- **Mobile admin layout** — the sidebar is a fixed 220px column and the products table scrolls horizontally past ~800px. Usable on desktop/tablet; a shop owner managing stock from their phone will find it cramped. The product editor panel itself is full-width on mobile already, just the table/sidebar around it aren't.
+- **PDP gallery** has no lightbox/zoom/swipe — just click-to-swap thumbnails, deliberately kept simple.
 
 ## Where things are
 
 - Plan: `C:\Users\premr\.claude\plans\melodic-watching-pony.md`
-- 3 clean commits on `master`: Phase 0, Phase 1–3, Phase 5–6.
-- This file (`HANDOFF.md`) and today's admin-usability fixes (variant-price display, photo upload, missing migrations) are **not yet committed** — do that once you've looked it over.
+- Commits on `master`: Phase 0, Phase 1–3, Phase 5–6, admin photo/variant fixes + this editor rebuild.

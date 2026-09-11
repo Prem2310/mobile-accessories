@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Badge } from '../../components/ds/Badge'
 import { Breadcrumbs } from '../../components/ds/Breadcrumbs'
@@ -23,6 +23,9 @@ export function ProductPage() {
   const [variantIndex, setVariantIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [tab, setTab] = useState('description')
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
+  useEffect(() => setActiveImageIndex(0), [product?.id])
+  const activeImage = product?.images[activeImageIndex] ?? product?.images[0]
   const addItem = useCartStore((s) => s.addItem)
   const openCart = useCartStore((s) => s.open)
   const wishlisted = useWishlistStore((s) => s.has(product?.id ?? ''))
@@ -75,13 +78,37 @@ export function ProductPage() {
       <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'var(--sp-10)' }}>
         {/* Gallery */}
         <div style={{ display: 'grid', gap: 'var(--sp-3)' }}>
-          <div style={{ aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--navy-200)' }}>
-            {product.images[0] ? (
-              <img src={product.images[0]} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-lg)' }} />
+          <div style={{ width: '100%', aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--navy-200)', overflow: 'hidden' }}>
+            {activeImage ? (
+              <img src={activeImage} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             ) : (
               <span style={{ font: 'var(--fw-bold) var(--fs-sm)/1.4 var(--font-body)', color: 'var(--text-faint)' }}>Product photo</span>
             )}
           </div>
+          {product.images.length > 1 && (
+            <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
+              {product.images.map((img, i) => (
+                <button
+                  key={img + i}
+                  onClick={() => setActiveImageIndex(i)}
+                  style={{
+                    width: 64,
+                    height: 64,
+                    flexShrink: 0,
+                    borderRadius: 'var(--radius-sm)',
+                    overflow: 'hidden',
+                    padding: 0,
+                    border: '2px solid ' + (i === activeImageIndex ? 'var(--orange-500)' : 'var(--border-subtle)'),
+                    background: 'var(--surface-sunken)',
+                    cursor: 'pointer',
+                  }}
+                  aria-label={`Photo ${i + 1}`}
+                >
+                  <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Buy panel */}
