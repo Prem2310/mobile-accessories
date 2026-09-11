@@ -78,7 +78,7 @@ export function ProductPage() {
       <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'var(--sp-10)' }}>
         {/* Gallery */}
         <div style={{ display: 'grid', gap: 'var(--sp-3)' }}>
-          <div style={{ width: '100%', aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--navy-200)', overflow: 'hidden' }}>
+          <div style={{ width: '100%', aspectRatio: '1/1', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-lg)', display: 'grid', placeItems: 'center', border: '1px dashed var(--border-default)', overflow: 'hidden' }}>
             {activeImage ? (
               <img src={activeImage} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             ) : (
@@ -98,7 +98,7 @@ export function ProductPage() {
                     borderRadius: 'var(--radius-sm)',
                     overflow: 'hidden',
                     padding: 0,
-                    border: '2px solid ' + (i === activeImageIndex ? 'var(--orange-500)' : 'var(--border-subtle)'),
+                    border: '2px solid ' + (i === activeImageIndex ? 'var(--ink-900)' : 'var(--border-subtle)'),
                     background: 'var(--surface-sunken)',
                     cursor: 'pointer',
                   }}
@@ -148,8 +148,8 @@ export function ProductPage() {
                       padding: '0 var(--sp-4)',
                       height: 'var(--control-sm)',
                       borderRadius: 'var(--radius-pill)',
-                      border: '1.5px solid ' + (i === variantIndex ? 'var(--orange-500)' : 'var(--border-default)'),
-                      background: i === variantIndex ? 'var(--orange-50)' : 'var(--white)',
+                      border: '1.5px solid ' + (i === variantIndex ? 'var(--ink-900)' : 'var(--border-default)'),
+                      background: i === variantIndex ? 'var(--gray-50)' : 'var(--white)',
                       color: v.stock <= 0 ? 'var(--text-faint)' : 'var(--text-strong)',
                       font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
                       cursor: v.stock <= 0 ? 'not-allowed' : 'pointer',

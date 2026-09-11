@@ -31,7 +31,7 @@ export function Tabs({ items = [], value, onChange, style, className }: TabsProp
               padding: '0 0 var(--sp-3)',
               font: 'var(--fw-bold) var(--fs-base)/1 var(--font-body)',
               color: on ? 'var(--navy-800)' : 'var(--text-muted)',
-              borderBottom: '3px solid ' + (on ? 'var(--orange-500)' : 'transparent'),
+              borderBottom: '3px solid ' + (on ? 'var(--ink-900)' : 'transparent'),
               marginBottom: -1,
               transition: 'var(--transition-control)',
             }}

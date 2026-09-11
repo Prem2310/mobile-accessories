@@ -47,11 +47,11 @@ export function MobileBottomNav() {
               padding: '10px 0',
               minHeight: 'var(--tap-min)',
               textDecoration: 'none',
-              color: active ? 'var(--orange-500)' : 'var(--gray-600)',
+              color: active ? 'var(--ink-900)' : 'var(--gray-600)',
               position: 'relative',
             }}
           >
-            <Icon name={it.icon} size={20} color={active ? 'var(--orange-500)' : 'var(--gray-600)'} />
+            <Icon name={it.icon} size={20} color={active ? 'var(--ink-900)' : 'var(--gray-600)'} />
             <span style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)' }}>{it.label}</span>
             {count != null && count > 0 && (
               <span style={{ position: 'absolute', top: 4, right: '28%', minWidth: 14, height: 14, borderRadius: 999, background: 'var(--orange-500)', color: '#fff', font: 'var(--fw-bold) 9px/14px var(--font-body)', textAlign: 'center' }}>

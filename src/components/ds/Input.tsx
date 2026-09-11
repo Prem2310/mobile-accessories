@@ -27,7 +27,7 @@ export function Input({ label, hint, error, iconLeft, suffix, style, ...rest }: 
           padding: '0 var(--sp-4)',
           background: 'var(--white)',
           borderRadius: 'var(--radius-md)',
-          border: '1.5px solid ' + (error ? 'var(--red-600)' : focused ? 'var(--orange-500)' : 'var(--border-default)'),
+          border: '1.5px solid ' + (error ? 'var(--red-600)' : focused ? 'var(--ink-900)' : 'var(--border-default)'),
           boxShadow: focused ? 'var(--ring-brand)' : 'none',
           transition: 'var(--transition-control)',
         }}

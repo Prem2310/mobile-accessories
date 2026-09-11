@@ -4,23 +4,24 @@
   --navy-200:#c3ceE6;--navy-100:#e3e9f5;--navy-50:#f2f5fb;
   --orange-700:#b34a00;--orange-600:#d55b00;--orange-500:#f26a00;--orange-400:#ff8425;
   --orange-200:#ffd0aa;--orange-100:#ffe9d8;--orange-50:#fff5ee;
-  /* Neutrals */
-  --white:#ffffff;--ink-900:#111726;--ink-700:#394052;--gray-800:#2a3245;--gray-600:#59617a;
-  --gray-400:#98a0b5;--gray-300:#c9cfdd;--gray-200:#e4e8f0;--gray-100:#f1f3f8;--gray-50:#f8f9fc;
+  /* Neutrals — true achromatic black/white/gray (Ecomus-style monochrome chrome), not navy-tinted */
+  --white:#ffffff;--ink-900:#121212;--ink-700:#333333;--gray-800:#404040;--gray-600:#6b6b6b;
+  --gray-400:#9a9a9a;--gray-300:#d0d0d0;--gray-200:#e8e8e8;--gray-100:#f2f2f2;--gray-50:#fafafa;
   /* Semantic status */
   --green-600:#128c4b;--green-100:#e2f6ea;
   --red-600:#c8281f;--red-100:#fdeae8;
   --amber-600:#c98a00;--amber-100:#fdf3dd;
   --whatsapp:#25d366;--whatsapp-dark:#128c7e;--instagram:#c13584;
 
-  /* Semantic aliases */
-  --brand:var(--orange-500);--brand-ink:var(--navy-800);
-  --text-strong:var(--navy-800);--text-body:var(--gray-800);--text-muted:var(--gray-600);
+  /* Semantic aliases — monochrome chrome (Ecomus reference); orange stays only as a small-accent
+     token (badges, countdown, the logo's "a") via its raw --orange-* variables, never through these. */
+  --brand:var(--ink-900);--brand-ink:var(--white);
+  --text-strong:var(--ink-900);--text-body:var(--gray-800);--text-muted:var(--gray-600);
   --text-faint:var(--gray-400);--text-on-brand:var(--white);--text-on-dark:var(--white);
-  --text-link:var(--orange-600);--text-link-hover:var(--orange-700);
+  --text-link:var(--ink-900);--text-link-hover:var(--ink-700);
   --surface-page:var(--white);--surface-card:var(--white);--surface-sunken:var(--gray-50);
-  --surface-dark:var(--navy-900);--surface-dark-alt:var(--navy-800);--surface-accent:var(--orange-50);
-  --border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--navy-800);
-  --border-brand:var(--orange-500);
-  --price:var(--navy-800);--price-strike:var(--gray-400);--save:var(--green-600);
+  --surface-dark:var(--ink-900);--surface-dark-alt:var(--ink-700);--surface-accent:var(--orange-50);
+  --border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--ink-900);
+  --border-brand:var(--ink-900);
+  --price:var(--ink-900);--price-strike:var(--gray-400);--save:var(--green-600);
 }

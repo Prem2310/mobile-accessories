@@ -29,8 +29,8 @@ export function Checkbox({ label, checked = false, count, style, ...rest }: Chec
           borderRadius: 'var(--radius-xs)',
           display: 'grid',
           placeItems: 'center',
-          border: '1.5px solid ' + (checked ? 'var(--orange-500)' : 'var(--border-default)'),
-          background: checked ? 'var(--orange-500)' : 'var(--white)',
+          border: '1.5px solid ' + (checked ? 'var(--ink-900)' : 'var(--border-default)'),
+          background: checked ? 'var(--ink-900)' : 'var(--white)',
           transition: 'var(--transition-control)',
         }}
       >

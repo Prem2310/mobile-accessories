@@ -89,7 +89,7 @@ export function ProductCard({
             bottom: 0,
             height: 38,
             border: 0,
-            background: 'var(--navy-900)',
+            background: 'var(--ink-900)',
             color: '#fff',
             font: 'var(--fw-bold) 11px/1 var(--font-body)',
             letterSpacing: '.06em',

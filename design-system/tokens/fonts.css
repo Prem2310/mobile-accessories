@@ -1,6 +1,2 @@
-/* Raghav Mobile Accessories — webfonts.
-   No original font files were supplied. The wordmark is a heavy rounded
-   geometric sans; "Baloo 2" (Google) is the closest free match and also
-   carries Devanagari + Gujarati for local-language copy.
-   UI text uses "Manrope"; prices/specs use "DM Mono". */
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap");
+/* Ecomus-style theme: one clean geometric sans ("Jost") across display, body and mono roles — matches the reference's single-typeface look instead of the old display/body/mono split. */
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&display=swap");

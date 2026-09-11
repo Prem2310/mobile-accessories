@@ -23,9 +23,9 @@ export function Tag({ selected = false, onClick, children, style, className }: T
         borderRadius: 'var(--radius-pill)',
         cursor: 'pointer',
         transition: 'var(--transition-control)',
-        border: '1.5px solid ' + (selected ? 'var(--navy-800)' : 'var(--border-default)'),
-        background: selected ? 'var(--navy-800)' : hover ? 'var(--navy-50)' : 'var(--white)',
-        color: selected ? 'var(--white)' : 'var(--navy-800)',
+        border: '1.5px solid ' + (selected ? 'var(--ink-900)' : 'var(--border-default)'),
+        background: selected ? 'var(--ink-900)' : hover ? 'var(--gray-50)' : 'var(--white)',
+        color: selected ? 'var(--white)' : 'var(--ink-900)',
         ...style,
       }}
     >

@@ -40,21 +40,21 @@ const sizes: Record<ButtonSize, CSSProperties> = {
   lg: { height: 'var(--control-lg)', padding: '0 var(--sp-8)', fontSize: 'var(--fs-lg)' },
 }
 const variants: Record<ButtonVariant, CSSProperties> = {
-  primary: { background: 'var(--orange-500)', color: 'var(--white)', boxShadow: 'var(--shadow-brand)' },
-  secondary: { background: 'var(--navy-800)', color: 'var(--white)' },
-  outline: { background: 'transparent', color: 'var(--navy-800)', borderColor: 'var(--navy-800)' },
-  ghost: { background: 'transparent', color: 'var(--navy-800)' },
+  primary: { background: 'var(--ink-900)', color: 'var(--white)' },
+  secondary: { background: 'transparent', color: 'var(--ink-900)', borderColor: 'var(--ink-900)' },
+  outline: { background: 'transparent', color: 'var(--ink-900)', borderColor: 'var(--ink-900)' },
+  ghost: { background: 'transparent', color: 'var(--ink-900)' },
   whatsapp: { background: 'var(--whatsapp)', color: 'var(--white)' },
 }
 const hovers: Record<ButtonVariant, CSSProperties> = {
-  primary: { background: 'var(--orange-600)' },
-  secondary: { background: 'var(--navy-700)' },
-  outline: { background: 'var(--navy-50)' },
+  primary: { background: 'var(--ink-700)' },
+  secondary: { background: 'var(--ink-900)', color: 'var(--white)' },
+  outline: { background: 'var(--gray-50)' },
   ghost: { background: 'var(--gray-100)' },
   whatsapp: { background: 'var(--whatsapp-dark)' },
 }
 
-/** Primary action control. Orange pill = buy/act, navy = secondary, WhatsApp green = order-on-chat. */
+/** Primary action control. Black pill = buy/act (Ecomus-style monochrome chrome), outlined = secondary, WhatsApp green = order-on-chat — the one functional color exception. */
 export function Button({
   variant = 'primary',
   size = 'md',

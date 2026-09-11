@@ -17,7 +17,7 @@ export function IconButton({ label, tone = 'neutral', size = 44, active = false,
   const [hover, setHover] = useState(false)
   const tones: Record<IconButtonTone, { color: string; bg: string }> = {
     neutral: { color: 'var(--navy-800)', bg: hover ? 'var(--gray-100)' : 'transparent' },
-    brand: { color: hover ? 'var(--white)' : 'var(--orange-500)', bg: hover ? 'var(--orange-500)' : 'var(--orange-50)' },
+    brand: { color: hover ? 'var(--white)' : 'var(--ink-900)', bg: hover ? 'var(--ink-900)' : 'var(--gray-100)' },
     onDark: { color: 'var(--white)', bg: hover ? 'rgba(255,255,255,.16)' : 'transparent' },
   }
   const t = tones[tone]
@@ -35,7 +35,7 @@ export function IconButton({ label, tone = 'neutral', size = 44, active = false,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 'var(--radius-pill)',
-        border: active ? '1.5px solid var(--orange-500)' : '1.5px solid transparent',
+        border: active ? '1.5px solid var(--ink-900)' : '1.5px solid transparent',
         background: t.bg,
         color: t.color,
         cursor: 'pointer',

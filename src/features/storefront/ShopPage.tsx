@@ -84,7 +84,7 @@ export function ShopPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>Filters</div>
         {activeFilterCount > 0 && (
-          <button onClick={clearAll} style={{ border: 0, background: 'none', cursor: 'pointer', color: 'var(--orange-600)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)' }}>
+          <button onClick={clearAll} style={{ border: 0, background: 'none', cursor: 'pointer', color: 'var(--ink-900)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', textDecoration: 'underline' }}>
             Clear all
           </button>
         )}

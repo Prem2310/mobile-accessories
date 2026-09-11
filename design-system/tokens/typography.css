@@ -1,7 +1,7 @@
 :root{
-  --font-display:"Baloo 2","Baloo Bhaijaan 2","Trebuchet MS",system-ui,sans-serif;
-  --font-body:"Manrope","Segoe UI",system-ui,sans-serif;
-  --font-mono:"DM Mono",ui-monospace,"SFMono-Regular",monospace;
+  --font-display:"Jost","Segoe UI",system-ui,sans-serif;
+  --font-body:"Jost","Segoe UI",system-ui,sans-serif;
+  --font-mono:"Jost",ui-monospace,"SFMono-Regular",monospace;
 
   --fs-display:44px;--fs-h1:34px;--fs-h2:26px;--fs-h3:20px;--fs-lg:17px;
   --fs-base:15px;--fs-sm:13px;--fs-xs:11.5px;
