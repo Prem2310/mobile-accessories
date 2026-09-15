@@ -46,11 +46,11 @@ export function getProducts(filter: ProductFilter = {}): Product[] {
     const q = filter.query.toLowerCase()
     list = list.filter((p) => p.title.toLowerCase().includes(q) || p.shortDescription?.toLowerCase().includes(q))
   }
-  if (filter.minPrice != null) list = list.filter((p) => p.price >= filter.minPrice!)
-  if (filter.maxPrice != null) list = list.filter((p) => p.price <= filter.maxPrice!)
+  if (filter.minPrice != null) list = list.filter((p) => getDisplayPrice(p).price >= filter.minPrice!)
+  if (filter.maxPrice != null) list = list.filter((p) => getDisplayPrice(p).price <= filter.maxPrice!)
   if (filter.minRating != null) list = list.filter((p) => (p.rating ?? 0) >= filter.minRating!)
-  if (filter.inStockOnly) list = list.filter((p) => p.stock > 0)
-  if (filter.discountedOnly) list = list.filter((p) => p.mrp && p.mrp > p.price)
+  if (filter.inStockOnly) list = list.filter((p) => getDisplayPrice(p).stock > 0)
+  if (filter.discountedOnly) list = list.filter((p) => discountPct(p) > 0)
   if (filter.brands?.length) list = list.filter((p) => p.brand && filter.brands!.includes(p.brand))
   if (filter.compatibility?.length) list = list.filter((p) => filter.compatibility!.some((m) => p.compatibility?.includes(m)))
 
@@ -59,10 +59,10 @@ export function getProducts(filter: ProductFilter = {}): Product[] {
       list = list.filter((p) => p.newArrival).concat(list.filter((p) => !p.newArrival))
       break
     case 'price-asc':
-      list.sort((a, b) => a.price - b.price)
+      list.sort((a, b) => getDisplayPrice(a).price - getDisplayPrice(b).price)
       break
     case 'price-desc':
-      list.sort((a, b) => b.price - a.price)
+      list.sort((a, b) => getDisplayPrice(b).price - getDisplayPrice(a).price)
       break
     case 'rating':
       list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
@@ -81,11 +81,24 @@ export function getProducts(filter: ProductFilter = {}): Product[] {
 }
 
 function discountPct(p: Product) {
-  return p.mrp && p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0
+  const { price, mrp } = getDisplayPrice(p)
+  return mrp && mrp > price ? Math.round((1 - price / mrp) * 100) : 0
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug)
+}
+
+/**
+ * The product's own price/mrp/stock columns go stale once it has variants (each variant
+ * carries its real price/mrp/stock) — the product detail page already resolves against the
+ * first variant, so every other card/row display must use this instead of `product.price`
+ * directly, or it'll show the product's leftover top-level values instead of real numbers.
+ */
+export function getDisplayPrice(p: Product): { price: number; mrp?: number; stock: number } {
+  const variant = p.variants?.[0]
+  if (!variant) return { price: p.price, mrp: p.mrp, stock: p.stock }
+  return { price: variant.price, mrp: variant.mrp, stock: variant.stock }
 }
 
 export function getFeaturedProducts(limit = 8): Product[] {

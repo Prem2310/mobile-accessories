@@ -4,7 +4,7 @@ import { Button } from '../../components/ds/Button'
 import { Icon } from '../../components/ds/Icon'
 import { IconButton } from '../../components/ds/IconButton'
 import { QuantityStepper } from '../../components/ds/QuantityStepper'
-import { getBestsellers, getSiteSettings } from '../../lib/catalog'
+import { getBestsellers, getDisplayPrice, getSiteSettings } from '../../lib/catalog'
 import { formatINR } from '../../lib/format'
 import { buildCartMessage, waLink } from '../../lib/whatsapp'
 import { useCartStore, useCartTotal } from '../../store/cart'
@@ -111,24 +111,27 @@ export function CartDrawer() {
                 <div>
                   <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)', marginBottom: 10 }}>You may also like</div>
                   <div style={{ display: 'grid', gap: 8 }}>
-                    {crossSell.map((p) => (
-                      <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
-                        <div style={{ width: 44, height: 44, flexShrink: 0, borderRadius: 'var(--radius-sm)', background: 'var(--surface-sunken)', overflow: 'hidden' }}>
-                          {p.images[0] && <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                    {crossSell.map((p) => {
+                      const { price } = getDisplayPrice(p)
+                      return (
+                        <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-3)' }}>
+                          <div style={{ width: 44, height: 44, flexShrink: 0, borderRadius: 'var(--radius-sm)', background: 'var(--surface-sunken)', overflow: 'hidden' }}>
+                            {p.images[0] && <img src={p.images[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-strong)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+                            <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--price)' }}>{formatINR(price)}</div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => addItem({ productId: p.id, title: p.title, price, slug: p.slug, quantity: 1, image: p.images[0] })}
+                            style={{ border: '1.5px solid var(--ink-900)', borderRadius: 999, background: 'transparent', color: 'var(--ink-900)', width: 28, height: 28, cursor: 'pointer', flexShrink: 0 }}
+                          >
+                            +
+                          </button>
                         </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-strong)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
-                          <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--price)' }}>{formatINR(p.price)}</div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => addItem({ productId: p.id, title: p.title, price: p.price, slug: p.slug, quantity: 1, image: p.images[0] })}
-                          style={{ border: '1.5px solid var(--ink-900)', borderRadius: 999, background: 'transparent', color: 'var(--ink-900)', width: 28, height: 28, cursor: 'pointer', flexShrink: 0 }}
-                        >
-                          +
-                        </button>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               )}

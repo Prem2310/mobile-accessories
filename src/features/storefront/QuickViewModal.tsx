@@ -6,6 +6,7 @@ import { Icon } from '../../components/ds/Icon'
 import { Price } from '../../components/ds/Price'
 import { QuantityStepper } from '../../components/ds/QuantityStepper'
 import { Rating } from '../../components/ds/Rating'
+import { getDisplayPrice } from '../../lib/catalog'
 import type { Product } from '../../lib/types'
 import { useCartStore } from '../../store/cart'
 
@@ -19,12 +20,14 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   const addItem = useCartStore((s) => s.addItem)
   const [qty, setQty] = useState(1)
 
+  const { price, mrp, stock } = product ? getDisplayPrice(product) : { price: 0, mrp: undefined, stock: 0 }
+
   const add = () => {
     if (!product) return
     addItem({
       productId: product.id,
       title: product.title,
-      price: product.price,
+      price,
       slug: product.slug,
       quantity: qty,
       image: product.images[0],
@@ -82,12 +85,12 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
               <div style={{ padding: 'var(--sp-6)', display: 'grid', gap: 'var(--sp-3)', alignContent: 'start' }}>
                 <h2 style={{ font: '700 clamp(18px, 2.4vw, 22px)/1.3 var(--font-display)', color: 'var(--text-strong)' }}>{product.title}</h2>
                 {product.rating != null && <Rating value={product.rating} count={product.reviewCount} />}
-                <Price amount={product.price} mrp={product.mrp} />
+                <Price amount={price} mrp={mrp} />
                 {product.shortDescription && <p style={{ color: 'var(--text-muted)', font: 'var(--fw-medium) var(--fs-sm)/1.5 var(--font-body)' }}>{product.shortDescription}</p>}
 
-                {product.stock > 0 ? (
+                {stock > 0 ? (
                   <>
-                    <QuantityStepper value={qty} onChange={setQty} min={1} max={product.stock} />
+                    <QuantityStepper value={qty} onChange={setQty} min={1} max={stock} />
                     <Button onClick={add} fullWidth>Add to cart</Button>
                   </>
                 ) : (
