@@ -27,5 +27,5 @@
   --surface-dark:var(--ink-900);--surface-dark-alt:var(--ink-700);--surface-accent:var(--orange-50);
   --border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--ink-900);
   --border-brand:var(--ink-900);
-  --price:var(--ink-900);--price-strike:var(--gray-400);--save:var(--green-600);
+  --price:var(--ink-900);--price-strike:var(--gray-400);--save:var(--ink-900);
 }

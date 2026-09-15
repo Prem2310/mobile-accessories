@@ -31,7 +31,16 @@ export function SectionHeading({ title, subtitle, action, align = 'left', tone =
       }}
     >
       <div>
-        <h2 style={{ font: '800 clamp(22px, 2.6vw, 30px)/1.15 var(--font-display)', letterSpacing: '-0.01em', color: dark ? 'var(--white)' : 'var(--text-strong)' }}>{title}</h2>
+        <h2
+          style={{
+            font: '400 clamp(22px, 2.6vw, 30px)/1.15 var(--font-display-black)',
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            color: dark ? 'var(--white)' : 'var(--text-strong)',
+          }}
+        >
+          {title}
+        </h2>
         {subtitle && <p style={{ marginTop: 'var(--sp-1)', font: 'var(--fw-medium) var(--fs-sm)/1.4 var(--font-body)', color: dark ? 'var(--gray-300)' : 'var(--text-muted)' }}>{subtitle}</p>}
       </div>
       {action}

@@ -1,5 +1,6 @@
 :root{
   --font-display:Archivo,"Segoe UI",system-ui,sans-serif;
+  --font-display-black:"Archivo Black",Archivo,"Segoe UI",system-ui,sans-serif;
   --font-body:Archivo,"Segoe UI",system-ui,sans-serif;
   --font-mono:Archivo,ui-monospace,"SFMono-Regular",monospace;
 
@@ -9,8 +10,8 @@
   --fw-regular:400;/* @kind font */--fw-medium:500;/* @kind font */--fw-semibold:600;/* @kind font */--fw-bold:700;/* @kind font */--fw-black:800;/* @kind font */
   --ls-tight:-0.02em;/* @kind other */--ls-normal:0;/* @kind other */--ls-wide:0.06em;/* @kind other */--ls-caps:0.12em;/* @kind other */
 
-  --type-display:var(--fw-black) var(--fs-display)/var(--lh-tight) var(--font-display);
-  --type-h1:var(--fw-bold) var(--fs-h1)/var(--lh-heading) var(--font-display);
+  --type-display:var(--fw-black) var(--fs-display)/var(--lh-tight) var(--font-display-black);
+  --type-h1:var(--fw-bold) var(--fs-h1)/var(--lh-heading) var(--font-display-black);
   --type-h2:var(--fw-bold) var(--fs-h2)/var(--lh-heading) var(--font-display);
   --type-h3:var(--fw-bold) var(--fs-h3)/var(--lh-heading) var(--font-body);
   --type-body:var(--fw-regular) var(--fs-base)/var(--lh-body) var(--font-body);

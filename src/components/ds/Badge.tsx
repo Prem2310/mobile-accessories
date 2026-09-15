@@ -9,16 +9,17 @@ export interface BadgeProps {
   className?: string
 }
 
-/* "sale"/"new"/"trend" hex values match the reference site's own status-badge colors
-   (Hot #fc5732, New #48d4bb, Trend #83b735), not the app's ink/orange accent tokens. */
-const map: Record<BadgeTone, { bg: string; fg: string }> = {
-  sale: { bg: '#fc5732', fg: 'var(--white)' },
-  new: { bg: '#48d4bb', fg: 'var(--white)' },
-  trend: { bg: '#83b735', fg: 'var(--white)' },
-  stock: { bg: 'var(--green-100)', fg: 'var(--green-600)' },
-  out: { bg: 'var(--red-100)', fg: 'var(--red-600)' },
+/* Monochrome badges: solid black for the tones that should grab the eye (sale, out of
+   stock), white-with-black-border for informational ones — same two pill styles the
+   landing page uses for "Best seller" vs "Just in". */
+const map: Record<BadgeTone, { bg: string; fg: string; border?: string }> = {
+  sale: { bg: 'var(--ink-900)', fg: 'var(--white)' },
+  new: { bg: 'var(--white)', fg: 'var(--ink-900)', border: '1px solid var(--ink-900)' },
+  trend: { bg: 'var(--white)', fg: 'var(--ink-900)', border: '1px solid var(--ink-900)' },
+  stock: { bg: 'var(--white)', fg: 'var(--ink-900)', border: '1px solid var(--ink-900)' },
+  out: { bg: 'var(--ink-900)', fg: 'var(--white)' },
   info: { bg: 'var(--gray-100)', fg: 'var(--gray-800)' },
-  warn: { bg: 'var(--amber-100)', fg: 'var(--amber-600)' },
+  warn: { bg: 'var(--white)', fg: 'var(--ink-900)', border: '1px solid var(--ink-900)' },
 }
 
 export function Badge({ tone = 'sale', children, style, className }: BadgeProps) {
@@ -32,6 +33,7 @@ export function Badge({ tone = 'sale', children, style, className }: BadgeProps)
         gap: 'var(--sp-1)',
         background: t.bg,
         color: t.fg,
+        border: t.border,
         font: 'var(--type-label)',
         letterSpacing: 'var(--ls-wide)',
         textTransform: 'uppercase',
