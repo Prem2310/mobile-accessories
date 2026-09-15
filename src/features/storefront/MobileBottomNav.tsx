@@ -54,7 +54,7 @@ export function MobileBottomNav() {
             <Icon name={it.icon} size={20} color={active ? 'var(--ink-900)' : 'var(--gray-600)'} />
             <span style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)' }}>{it.label}</span>
             {count != null && count > 0 && (
-              <span style={{ position: 'absolute', top: 4, right: '28%', minWidth: 14, height: 14, borderRadius: 999, background: 'var(--orange-500)', color: '#fff', font: 'var(--fw-bold) 9px/14px var(--font-body)', textAlign: 'center' }}>
+              <span style={{ position: 'absolute', top: 4, right: '28%', minWidth: 14, height: 14, borderRadius: 999, background: '#000', color: '#fff', font: 'var(--fw-bold) 9px/14px var(--font-body)', textAlign: 'center' }}>
                 {count}
               </span>
             )}
@@ -69,7 +69,7 @@ export function MobileBottomNav() {
         <Icon name="shopping-bag" size={20} color="var(--gray-600)" />
         <span style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)' }}>Cart</span>
         {cartCount > 0 && (
-          <span style={{ position: 'absolute', top: 4, right: '28%', minWidth: 14, height: 14, borderRadius: 999, background: 'var(--orange-500)', color: '#fff', font: 'var(--fw-bold) 9px/14px var(--font-body)', textAlign: 'center' }}>
+          <span style={{ position: 'absolute', top: 4, right: '28%', minWidth: 14, height: 14, borderRadius: 999, background: '#000', color: '#fff', font: 'var(--fw-bold) 9px/14px var(--font-body)', textAlign: 'center' }}>
             {cartCount}
           </span>
         )}

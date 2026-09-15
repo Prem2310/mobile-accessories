@@ -1,17 +1,21 @@
 :root{
-  /* Brand — sampled from the shop signage logo */
-  --navy-900:#061738;--navy-800:#0a2153;--navy-700:#132d68;--navy-600:#1d3c82;--navy-500:#2b4fa0;
-  --navy-200:#c3ceE6;--navy-100:#e3e9f5;--navy-50:#f2f5fb;
+  /* Brand — the site is now black & white editorial (Archivo); "navy" is kept as a grayscale
+     ramp only so components that reference it (sidebars, active nav states) stay monochrome
+     without a rename sweep. Orange/green/red/amber stay as small colored accents — badges,
+     discount %, stock status — per the reference's "small details can differ" allowance. */
+  --navy-900:#000000;--navy-800:#1a1a1a;--navy-700:#333333;--navy-600:#4d4d4d;--navy-500:#666666;
+  --navy-200:#cccccc;--navy-100:#e6e6e6;--navy-50:#f5f5f5;
   --orange-700:#b34a00;--orange-600:#d55b00;--orange-500:#f26a00;--orange-400:#ff8425;
   --orange-200:#ffd0aa;--orange-100:#ffe9d8;--orange-50:#fff5ee;
-  /* Neutrals — true achromatic black/white/gray (Ecomus-style monochrome chrome), not navy-tinted */
+  /* Neutrals — true achromatic black/white/gray */
   --white:#ffffff;--ink-900:#121212;--ink-700:#333333;--gray-800:#404040;--gray-600:#6b6b6b;
   --gray-400:#9a9a9a;--gray-300:#d0d0d0;--gray-200:#e8e8e8;--gray-100:#f2f2f2;--gray-50:#fafafa;
-  /* Semantic status */
+  /* Semantic status — small accent colors for badges/stock indicators, not chrome */
   --green-600:#128c4b;--green-100:#e2f6ea;
   --red-600:#c8281f;--red-100:#fdeae8;
   --amber-600:#c98a00;--amber-100:#fdf3dd;
-  --whatsapp:#25d366;--whatsapp-dark:#128c7e;--instagram:#c13584;
+  /* WhatsApp CTAs go monochrome (black/dark-gray) to match the rest of the chrome, not the brand green */
+  --whatsapp:#000000;--whatsapp-dark:#333333;--instagram:#000000;
 
   /* Semantic aliases — monochrome chrome (Ecomus reference); orange stays only as a small-accent
      token (badges, countdown, the logo's "a") via its raw --orange-* variables, never through these. */

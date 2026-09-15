@@ -18,8 +18,8 @@ function Root() {
 
   if (state === 'loading') {
     return (
-      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--surface-page, #f8f9fc)' }}>
-        <div style={{ font: '800 20px/1 "Baloo 2", sans-serif', color: '#0a2153' }}>Raghav Mobile Accessories</div>
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--surface-page, #fff)' }}>
+        <div style={{ font: '800 20px/1 Archivo, sans-serif', color: '#000' }}>Raghav Mobile Accessories</div>
       </div>
     )
   }
@@ -28,8 +28,8 @@ function Root() {
     return (
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', textAlign: 'center', padding: 24 }}>
         <div>
-          <div style={{ font: '700 18px/1.4 sans-serif', color: '#0a2153', marginBottom: 8 }}>Couldn't load the store right now.</div>
-          <p style={{ color: '#59617a' }}>Please refresh the page. If this keeps happening, contact us on WhatsApp.</p>
+          <div style={{ font: '700 18px/1.4 Archivo, sans-serif', color: '#000', marginBottom: 8 }}>Couldn't load the store right now.</div>
+          <p style={{ color: '#666' }}>Please refresh the page. If this keeps happening, contact us on WhatsApp.</p>
         </div>
       </div>
     )

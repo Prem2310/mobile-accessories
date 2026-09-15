@@ -33,7 +33,7 @@ export function AdminLayout() {
       <aside style={{ width: 220, flex: '0 0 auto', background: 'var(--navy-900)', color: '#fff', display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: 'var(--sp-5)' }}>
           <div style={{ font: '800 22px/1 var(--font-display)' }}>
-            Ragh<span style={{ color: 'var(--orange-500)' }}>a</span>v
+            RAGHAV
           </div>
           <div style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)', letterSpacing: 'var(--ls-caps)', color: 'var(--navy-200)', textTransform: 'uppercase', marginTop: 4 }}>Admin</div>
         </div>

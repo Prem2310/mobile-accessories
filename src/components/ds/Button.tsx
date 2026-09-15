@@ -54,7 +54,7 @@ const hovers: Record<ButtonVariant, CSSProperties> = {
   whatsapp: { background: 'var(--whatsapp-dark)' },
 }
 
-/** Primary action control. Outline pill (black border/text) = the dominant Ecomus CTA style, fills solid black on hover; secondary is solid black by default; WhatsApp green = order-on-chat, the one functional color exception. */
+/** Primary action control. Outline pill (black border/text) = the dominant Ecomus CTA style, fills solid black on hover; secondary is solid black by default; WhatsApp variant is monochrome too (order-on-chat), just a darker-on-hover black pill instead of brand green. */
 export function Button({
   variant = 'primary',
   size = 'md',

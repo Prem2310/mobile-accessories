@@ -58,7 +58,7 @@ function IconOnlyWhatsApp({ settings }: { settings: SiteSettings }) {
         width: 52,
         height: 52,
         borderRadius: 'var(--radius-pill)',
-        background: '#000',
+        background: 'var(--whatsapp)',
         color: '#fff',
         display: 'grid',
         placeItems: 'center',

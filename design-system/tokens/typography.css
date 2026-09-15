@@ -1,7 +1,7 @@
 :root{
-  --font-display:"Albert Sans","Segoe UI",system-ui,sans-serif;
-  --font-body:"Albert Sans","Segoe UI",system-ui,sans-serif;
-  --font-mono:"Albert Sans",ui-monospace,"SFMono-Regular",monospace;
+  --font-display:Archivo,"Segoe UI",system-ui,sans-serif;
+  --font-body:Archivo,"Segoe UI",system-ui,sans-serif;
+  --font-mono:Archivo,ui-monospace,"SFMono-Regular",monospace;
 
   --fs-display:44px;--fs-h1:34px;--fs-h2:26px;--fs-h3:20px;--fs-lg:17px;
   --fs-base:15px;--fs-sm:13px;--fs-xs:11.5px;

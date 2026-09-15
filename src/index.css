@@ -1,7 +1,4 @@
 @import "../design-system/tokens/fonts.css";
-/* Archivo / Archivo Black — the editorial mono landing page's display face, used only by
-   Header/Footer/HomePage; the rest of the site keeps Albert Sans via --font-display. */
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&display=swap");
 @import "../design-system/tokens/colors.css";
 @import "../design-system/tokens/typography.css";
 @import "../design-system/tokens/spacing.css";
