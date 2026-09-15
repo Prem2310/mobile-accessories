@@ -1,4 +1,7 @@
 @import "../design-system/tokens/fonts.css";
+/* Archivo / Archivo Black — the editorial mono landing page's display face, used only by
+   Header/Footer/HomePage; the rest of the site keeps Albert Sans via --font-display. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&display=swap");
 @import "../design-system/tokens/colors.css";
 @import "../design-system/tokens/typography.css";
 @import "../design-system/tokens/spacing.css";
@@ -100,4 +103,47 @@
 }
 .press-scale:active {
   transform: var(--press-scale);
+}
+
+/* Mono landing page (Header/Footer/HomePage) — scoped hover/animation rules that can't be
+   expressed as inline styles. Colors are hardcoded to the design-handoff's exact hex values
+   rather than the site's --ink-900 tokens, since this surface calls for pixel-fidelity. */
+@keyframes lp-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.lp-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: lp-marquee 26s linear infinite;
+}
+.lp-cart-pill:hover { background: #000; color: #fff; }
+.lp-btn-solid:hover { background: #333 !important; }
+.lp-btn-outline:hover { background: #000 !important; color: #fff !important; }
+.lp-btn-on-black:hover { background: #d8d8d8 !important; }
+.lp-btn-outline-on-black:hover { background: #fff !important; color: #000 !important; }
+.lp-cat-card {
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s ease;
+}
+.lp-cat-card:hover {
+  background: #000;
+  color: #fff;
+  transform: perspective(900px) rotateY(-7deg) translate3d(0, -6px, 24px);
+}
+.lp-product-card {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.5s ease;
+}
+.lp-product-card:hover {
+  transform: perspective(1000px) rotateX(4deg) rotateY(-6deg) translate3d(0, -8px, 32px);
+  box-shadow: 0 34px 70px rgba(0, 0, 0, 0.22);
+  z-index: 2;
+}
+.lp-add-btn:hover { background: #000 !important; color: #fff !important; }
+.lp-ig-tile { transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.lp-ig-tile:hover { transform: scale(1.06); }
+@media (prefers-reduced-motion: reduce) {
+  .lp-marquee-track { animation: none; }
+  .lp-cat-card, .lp-product-card, .lp-ig-tile { transition: none; }
 }

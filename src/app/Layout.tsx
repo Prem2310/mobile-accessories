@@ -15,8 +15,12 @@ export function Layout() {
   const location = useLocation()
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [location.pathname])
+    if (location.hash) {
+      document.getElementById(location.hash.slice(1))?.scrollIntoView()
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [location.pathname, location.hash])
 
   // Product pages already carry their own WhatsApp CTA in the sticky mobile buy bar —
   // the global floating icon would sit on top of it, so it's suppressed there on mobile.
