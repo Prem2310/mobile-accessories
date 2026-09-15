@@ -22,17 +22,21 @@ export async function adminGetProduct(id: string) {
   return data as ProductRow & { product_variants: VariantRow[]; product_images: ImageRow[] }
 }
 
-export async function adminListProducts() {
-  const { data, error } = await supabase
+export async function adminListProducts(page: number, pageSize: number) {
+  const { data, error, count } = await supabase
     .from('products')
-    .select('*, categories(name), product_variants(count), product_images(public_url, position)')
+    .select('*, categories(name), product_variants(count), product_images(public_url, position)', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1)
   if (error) throw error
-  return data as (ProductRow & {
-    categories: { name: string } | null
-    product_variants: { count: number }[]
-    product_images: { public_url: string; position: number }[]
-  })[]
+  return {
+    data: data as (ProductRow & {
+      categories: { name: string } | null
+      product_variants: { count: number }[]
+      product_images: { public_url: string; position: number }[]
+    })[],
+    count: count ?? 0,
+  }
 }
 
 export async function adminCreateProduct(input: ProductInsert) {
@@ -200,5 +204,26 @@ export async function adminGetSettings() {
 
 export async function adminUpdateSettings(patch: Partial<Database['public']['Tables']['site_settings']['Update']>) {
   const { error } = await supabase.from('site_settings').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', true)
+  if (error) throw error
+}
+
+type ReviewRow = Database['public']['Tables']['reviews']['Row']
+type ReviewInsert = Database['public']['Tables']['reviews']['Insert']
+
+export async function adminListReviews(productId?: string) {
+  let query = supabase.from('reviews').select('*, products(title)').order('created_at', { ascending: false })
+  if (productId) query = query.eq('product_id', productId)
+  const { data, error } = await query
+  if (error) throw error
+  return data as (ReviewRow & { products: { title: string } | null })[]
+}
+
+export async function adminSetReviewApproved(id: string, approved: boolean) {
+  const { error } = await supabase.from('reviews').update({ approved }).eq('id', id)
+  if (error) throw error
+}
+
+export async function adminCreateReview(input: ReviewInsert) {
+  const { error } = await supabase.from('reviews').insert(input)
   if (error) throw error
 }

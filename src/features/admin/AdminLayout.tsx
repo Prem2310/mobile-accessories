@@ -9,6 +9,7 @@ const NAV: { to: string; label: string; icon: IconName }[] = [
   { to: '/admin/products', label: 'Products', icon: 'package' },
   { to: '/admin/categories', label: 'Categories', icon: 'shopping-bag' },
   { to: '/admin/banners', label: 'Banners & Offers', icon: 'zap' },
+  { to: '/admin/reviews', label: 'Reviews', icon: 'star' },
   { to: '/admin/settings', label: 'Settings', icon: 'sliders-horizontal' },
 ]
 
@@ -30,14 +31,14 @@ export function AdminLayout() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex' }}>
-      <aside style={{ width: 220, flex: '0 0 auto', background: 'var(--navy-900)', color: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <aside style={{ width: 220, flex: '0 0 auto', background: 'var(--navy-900)', color: '#fff', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
         <div style={{ padding: 'var(--sp-5)' }}>
           <div style={{ font: '800 22px/1 var(--font-display)' }}>
             RAGHAV
           </div>
           <div style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)', letterSpacing: 'var(--ls-caps)', color: 'var(--navy-200)', textTransform: 'uppercase', marginTop: 4 }}>Admin</div>
         </div>
-        <nav style={{ display: 'grid', gap: 2, padding: 'var(--sp-3)', flex: 1 }}>
+        <nav style={{ display: 'grid', gap: 2, padding: 'var(--sp-3)', flex: 1, overflowY: 'auto' }}>
           {NAV.map((item) => (
             <NavLink
               key={item.to}

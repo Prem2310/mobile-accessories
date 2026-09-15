@@ -65,7 +65,7 @@ export function CartDrawer() {
                   {remaining > 0 ? (
                     <>Add <strong style={{ color: 'var(--ink-900)' }}>{formatINR(remaining)}</strong> more for free delivery</>
                   ) : (
-                    <span style={{ color: 'var(--green-600)' }}>You've unlocked free delivery</span>
+                    <span style={{ color: 'var(--ink-900)', fontWeight: 700 }}>You've unlocked free delivery</span>
                   )}
                 </div>
                 <div style={{ height: 4, borderRadius: 999, background: 'var(--gray-200)', overflow: 'hidden' }}>

@@ -131,8 +131,20 @@ export function ProductCard({
         >
           {title}
         </div>
-        {subtitle && <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)', color: 'var(--text-muted)' }}>{subtitle}</div>}
-        {rating != null && <Rating value={rating} count={reviews} />}
+        <div
+          style={{
+            font: 'var(--fw-medium) var(--fs-xs)/1.3 var(--font-body)',
+            color: 'var(--text-muted)',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            minHeight: 31,
+          }}
+        >
+          {subtitle}
+        </div>
+        <div style={{ minHeight: 22, display: 'flex', alignItems: 'center' }}>{rating != null && <Rating value={rating} count={reviews} />}</div>
         <Price amount={price} mrp={mrp} />
       </div>
     </div>

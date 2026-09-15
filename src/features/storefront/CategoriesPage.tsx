@@ -30,7 +30,19 @@ export function CategoriesPage() {
             }}
           >
             <Icon name={c.icon ?? 'package'} size={30} color="var(--ink-900)" />
-            <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)', color: 'var(--text-strong)' }}>{c.name}</div>
+            <div
+              style={{
+                font: 'var(--fw-bold) var(--fs-sm)/1.3 var(--font-body)',
+                color: 'var(--text-strong)',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                minHeight: 36,
+              }}
+            >
+              {c.name}
+            </div>
             <div style={{ font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)' }}>{getCategoryProductCount(c.id)} products</div>
           </Link>
         ))}

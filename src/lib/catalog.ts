@@ -44,7 +44,14 @@ export function getProducts(filter: ProductFilter = {}): Product[] {
   }
   if (filter.query) {
     const q = filter.query.toLowerCase()
-    list = list.filter((p) => p.title.toLowerCase().includes(q) || p.shortDescription?.toLowerCase().includes(q))
+    list = list.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.shortDescription?.toLowerCase().includes(q) ||
+        p.brand?.toLowerCase().includes(q) ||
+        p.compatibility?.some((c) => c.toLowerCase().includes(q)) ||
+        p.variants?.some((v) => Object.values(v.attributes).some((val) => val.toLowerCase().includes(q))),
+    )
   }
   if (filter.minPrice != null) list = list.filter((p) => getDisplayPrice(p).price >= filter.minPrice!)
   if (filter.maxPrice != null) list = list.filter((p) => getDisplayPrice(p).price <= filter.maxPrice!)

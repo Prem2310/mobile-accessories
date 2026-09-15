@@ -9,8 +9,9 @@ import { adminCreateProduct, adminDeleteProduct, adminListCategories, adminListP
 import { ProductEditorPanel } from './ProductEditorPanel'
 import type { Database } from '../../lib/database.types'
 
-type Product = Awaited<ReturnType<typeof adminListProducts>>[number]
+type Product = Awaited<ReturnType<typeof adminListProducts>>['data'][number]
 type Category = Database['public']['Tables']['categories']['Row']
+const PAGE_SIZE = 20
 
 function slugify(s: string) {
   return s
@@ -31,18 +32,28 @@ export function AdminProductsPage() {
   const [categoryFilter, setCategoryFilter] = useState('')
   const [stockFilter, setStockFilter] = useState<'all' | 'out' | 'low'>('all')
   const [publishedFilter, setPublishedFilter] = useState<'all' | 'live' | 'hidden'>('all')
+  const [page, setPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
 
   const refresh = async () => {
     setLoading(true)
-    const [p, c] = await Promise.all([adminListProducts(), adminListCategories()])
+    const [{ data: p, count }, c] = await Promise.all([adminListProducts(page, PAGE_SIZE), adminListCategories()])
     setProducts(p)
+    setTotalCount(count)
     setCategories(c)
     setLoading(false)
   }
 
   useEffect(() => {
     refresh()
-  }, [])
+  }, [page])
+
+  // Any filter change should re-anchor on page 1, since a filtered result set no longer maps to the same page numbers.
+  useEffect(() => {
+    setPage(1)
+  }, [search, categoryFilter, stockFilter, publishedFilter])
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
 
   const updateField = async (id: string, patch: Partial<Product>) => {
     setSavingId(id)
@@ -119,7 +130,7 @@ export function AdminProductsPage() {
           onChange={(e) => setPublishedFilter(e.target.value as typeof publishedFilter)}
         />
         <span style={{ color: 'var(--text-faint)', font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)' }}>
-          {filteredProducts.length} of {products.length}
+          {filteredProducts.length} of {products.length} on this page · {totalCount} total
         </span>
       </div>
 
@@ -213,6 +224,22 @@ export function AdminProductsPage() {
         </table>
       </div>
 
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--sp-2)' }}>
+          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} style={pagerButtonStyle(page === 1)}>
+            Prev
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            <button key={n} onClick={() => setPage(n)} style={pagerButtonStyle(false, n === page)}>
+              {n}
+            </button>
+          ))}
+          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pagerButtonStyle(page === totalPages)}>
+            Next
+          </button>
+        </div>
+      )}
+
       {editingId && (
         <ProductEditorPanel
           productId={editingId}
@@ -230,6 +257,21 @@ export function AdminProductsPage() {
 
 const th: React.CSSProperties = { padding: '10px 16px' }
 const td: React.CSSProperties = { padding: '10px 16px' }
+
+function pagerButtonStyle(disabled: boolean, active = false): React.CSSProperties {
+  return {
+    minWidth: 36,
+    height: 36,
+    padding: '0 10px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--border-default)',
+    background: active ? 'var(--ink-900)' : 'var(--white)',
+    color: active ? 'var(--white)' : disabled ? 'var(--text-faint)' : 'var(--text-strong)',
+    cursor: disabled ? 'default' : 'pointer',
+    font: 'var(--fw-semibold) var(--fs-sm)/1 var(--font-body)',
+    opacity: disabled ? 0.5 : 1,
+  }
+}
 
 function PhotoCell({ product }: { product: Product }) {
   const url = [...(product.product_images ?? [])].sort((a, b) => a.position - b.position)[0]?.public_url
@@ -315,6 +357,9 @@ function NewProductForm({ categories, onClose, onCreated }: { categories: Catego
         <Input label="MRP (₹)" type="number" value={mrp} onChange={(e) => setMrp(e.target.value)} />
         <Input label="Stock" type="number" value={stock} onChange={(e) => setStock(e.target.value)} />
       </div>
+      <p style={{ marginTop: -8, font: 'var(--fw-medium) var(--fs-xs)/1.4 var(--font-body)', color: 'var(--text-muted)' }}>
+        Set MRP higher than price to show a discount badge on the storefront.
+      </p>
       <Input label="Short description" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} />
       {error && <p style={{ color: 'var(--red-600)', font: 'var(--fw-medium) var(--fs-sm)/1 var(--font-body)' }}>{error}</p>}
       <div style={{ display: 'flex', gap: 'var(--sp-3)' }}>

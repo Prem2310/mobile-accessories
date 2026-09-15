@@ -26,7 +26,10 @@ export function ProductGrid({ products }: { products: Product[] }) {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--sp-4)' }}>
+    <div
+      className="grid grid-cols-2 sm:[grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]"
+      style={{ gap: 'var(--sp-4)' }}
+    >
       {products.map((p) => {
         const { price, mrp, stock } = getDisplayPrice(p)
         return (
