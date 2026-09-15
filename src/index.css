@@ -123,6 +123,7 @@
 .lp-btn-on-black:hover { background: #d8d8d8 !important; }
 .lp-btn-outline-on-black:hover { background: #fff !important; color: #000 !important; }
 .lp-cat-card {
+  color: #000;
   transform-style: preserve-3d;
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s ease;
 }

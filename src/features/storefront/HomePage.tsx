@@ -27,6 +27,7 @@ function SectionH2({ children }: { children: React.ReactNode }) {
     <h2
       style={{
         margin: 0,
+        color: '#000',
         fontFamily: "'Archivo Black', Archivo, sans-serif",
         fontSize: 'clamp(26px,3.4vw,40px)',
         letterSpacing: '-0.03em',
@@ -74,7 +75,7 @@ export function HomePage() {
               <Link
                 to={`/shop?category=${c.slug}`}
                 className="lp-cat-card"
-                style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: '28px 22px', borderRight: '1px solid #000', textDecoration: 'none', color: 'inherit' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: '28px 22px', borderRight: '1px solid #000', textDecoration: 'none' }}
               >
                 <Icon name={c.icon ?? CATEGORY_ICON_BY_SLUG[c.slug] ?? 'package'} size={40} strokeWidth={1.4} />
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
@@ -145,6 +146,7 @@ function Hero({ settings, productCount }: { settings: ReturnType<typeof getSiteS
           transition={{ duration: 0.9, ease: [0.2, 0.7, 0.2, 1] }}
           style={{
             margin: 0,
+            color: '#000',
             fontFamily: "'Archivo Black', Archivo, sans-serif",
             fontSize: 'clamp(30px,10.6vw,178px)',
             lineHeight: 0.84,
@@ -269,7 +271,7 @@ function ProductSection({
               </Link>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {p.brand && <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#777' }}>{p.brand}</span>}
-                <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, letterSpacing: '-0.01em', lineHeight: 1.25 }}>{p.title}</h3>
+                <h3 style={{ margin: 0, color: '#000', fontSize: 17, fontWeight: 800, letterSpacing: '-0.01em', lineHeight: 1.25 }}>{p.title}</h3>
               </div>
               <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
@@ -317,7 +319,7 @@ function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings
     <section id="visit" style={{ background: '#000', color: '#fff', borderBottom: '1px solid #000' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, padding: '44px 28px 30px' }}>
         <Reveal>
-          <h2 style={{ margin: 0, fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 'clamp(28px,4.4vw,54px)', letterSpacing: '-0.035em', textTransform: 'uppercase' }}>Two taps to us</h2>
+          <h2 style={{ margin: 0, color: '#fff', fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 'clamp(28px,4.4vw,54px)', letterSpacing: '-0.035em', textTransform: 'uppercase' }}>Two taps to us</h2>
         </Reveal>
         <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8d8d8d' }}>{settings.area || 'Vastral, Ahmedabad'} · Open all days</span>
       </div>
@@ -326,7 +328,7 @@ function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings
         <Reveal>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 22, padding: '40px 28px', borderRight: '1px solid rgba(255,255,255,0.18)', height: '100%' }}>
             <Icon name="message-circle" size={46} strokeWidth={1.3} color="#fff" />
-            <h3 style={{ margin: 0, fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 'clamp(24px,3vw,36px)', lineHeight: 1, textTransform: 'uppercase' }}>
+            <h3 style={{ margin: 0, color: '#fff', fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 'clamp(24px,3vw,36px)', lineHeight: 1, textTransform: 'uppercase' }}>
               Order on<br />WhatsApp
             </h3>
             <p style={{ margin: 0, maxWidth: '34ch', fontSize: 16, lineHeight: 1.6, color: '#b4b4b4' }}>
