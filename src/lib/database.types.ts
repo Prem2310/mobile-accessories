@@ -232,6 +232,7 @@ export type Database = {
           cta_label: string | null
           ends_at: string | null
           id: string
+          image_url: string | null
           sort_order: number
           starts_at: string | null
           subtitle: string | null
@@ -245,6 +246,7 @@ export type Database = {
           cta_label?: string | null
           ends_at?: string | null
           id?: string
+          image_url?: string | null
           sort_order?: number
           starts_at?: string | null
           subtitle?: string | null
@@ -258,6 +260,7 @@ export type Database = {
           cta_label?: string | null
           ends_at?: string | null
           id?: string
+          image_url?: string | null
           sort_order?: number
           starts_at?: string | null
           subtitle?: string | null
@@ -489,6 +492,7 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          address: string
           area: string
           free_delivery_threshold: number
           gst_number: string | null
@@ -505,6 +509,7 @@ export type Database = {
           whatsapp_order_template: string
         }
         Insert: {
+          address?: string
           area?: string
           free_delivery_threshold?: number
           gst_number?: string | null
@@ -521,6 +526,7 @@ export type Database = {
           whatsapp_order_template?: string
         }
         Update: {
+          address?: string
           area?: string
           free_delivery_threshold?: number
           gst_number?: string | null
@@ -537,6 +543,32 @@ export type Database = {
           whatsapp_order_template?: string
         }
         Relationships: []
+      }
+      wishlists: {
+        Row: {
+          created_at: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

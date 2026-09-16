@@ -1,13 +1,14 @@
 -- Seed data matching src/lib/mockData.ts, so swapping the storefront onto
--- Supabase reads doesn't change what's on screen. Placeholder data only —
--- no real Raghav prices/stock/claims, per the brief.
+-- Supabase reads doesn't change what's on screen. Product prices/stock are
+-- placeholder — the Instagram handle and reviews below are real, pulled from
+-- the shop's Google Business listing.
 
 update public.site_settings set
   store_name = 'Raghav Mobile Accessories',
   area = 'Vastral, Ahmedabad',
   hours = '10:00 am – 10:00 pm, all days',
-  whatsapp_number = '919999999999',
-  instagram_handle = '@raghavmobile',
+  whatsapp_number = '919974713131',
+  instagram_handle = '@raghav_mobile_accessories',
   gst_number = '24XXXXX1234X1ZX',
   whatsapp_order_template = E'Hi {{store}}, I want to order:\n{{items}}\nTotal: {{total}}',
   whatsapp_enquiry_template = 'Hi {{store}}, I have a question about {{product}}.',
@@ -130,14 +131,28 @@ select p.id, upper(p.slug) || '-' || row_number() over (partition by p.slug orde
   case row_number() over (partition by p.slug order by v.model) when 4 then 0 else 12 - (row_number() over (partition by p.slug order by v.model) - 1) * 3 end
 from v join public.products p on p.slug = v.product_slug;
 
+-- Real Google reviews for Raghav Mobile Accessories (Vastral, Ahmedabad), attached to
+-- seed products since reviews are product-scoped in this schema.
 insert into public.reviews (product_id, author, rating, comment, verified, approved)
-select id, 'Aakash P.', 5, 'Fits perfectly, matte feel is premium.', true, true from public.products where slug = 'matte-silicone-case'
+select id, 'Darsh ._.s', 5, 'Excellent service at Raghav Mobile! The staff is very helpful, knowledgeable, and polite. They offer genuine products at reasonable prices and explain everything clearly. My issue was resolved quickly and professionally. Highly recommended for anyone looking for mobile phones, accessories, or repairs. Will definitely visit again!', true, true from public.products where slug = 'matte-silicone-case'
 union all
-select id, 'Dhruvi S.', 4, 'Good grip, camera bump protected well.', true, true from public.products where slug = 'matte-silicone-case'
+select id, 'Shree RAGHAV', 5, 'Really happy with my experience! I just went for a mobile cover but ended up buying handsfree and also got a beautiful back wrap done. The finishing was so clean and perfect that my phone looks brand new now. Very good customer service, humble staff, and genuine products. This shop truly deserves 5 stars!', true, true from public.products where slug = 'clear-magsafe-case'
 union all
-select id, 'Kunal M.', 5, 'Charges fast, no heating issue.', true, true from public.products where slug = 'fast-usb-c-charger'
+select id, 'Mayur Chauhan', 5, 'Loved the service and product quality here! They handled my phone carefully while doing the back wrapping and even helped me choose the best design. The cover fits perfectly and the handsfree works great. One of the best shops for accessories.', true, true from public.products where slug = '9h-tempered-glass'
 union all
-select id, 'Riya J.', 4, 'Battery life is as advertised.', false, true from public.products where slug = 'tws-earbuds-pro';
+select id, 'Shree Raghav Wirecut', 5, 'Excellent experience! I bought a mobile cover, handsfree, and back wrapping — superb quality and perfect fitting. Great service and reasonable prices. Highly recommended!', true, true from public.products where slug = 'fast-usb-c-charger'
+union all
+select id, 'Mo Azaz', 5, 'Most affordable price. Exceptional service and quality! I had an absolutely fantastic experience at Raghav Mobile Accessories.', true, true from public.products where slug = 'braided-type-c-cable'
+union all
+select id, 'Jemin Acharya', 5, 'Very satisfied with my purchase. The mobile accessories are premium quality, and the back wrapping was done neatly. Great shop for all mobile needs!', true, true from public.products where slug = 'powerbank-10000mah'
+union all
+select id, 'Rahul Prajapati', 5, 'The quality of the skin and tempered glass is very good, and the prices are reasonable.', true, true from public.products where slug = 'wired-earphones'
+union all
+select id, 'Shrey Patel', 5, 'I buy all the covers from this shop and all the covers are excellent.', true, true from public.products where slug = 'tws-earbuds-pro'
+union all
+select id, 'Rajvirsinh Sisodiya', 5, 'I have bought a phone cover. So good quality cases.', true, true from public.products where slug = 'car-mobile-holder'
+union all
+select id, 'Ajay Pariya', 5, 'Good service and excellent product quality, must visit and buy stuff.', true, true from public.products where slug = 'desk-mobile-stand';
 
 insert into public.offers (title, subtitle, tone, cta_label, cta_href, sort_order) values
   ('Free screen-guard fitting, every day', 'Bring your phone to the Vastral store.', 'navy', 'Get directions', null, 1),

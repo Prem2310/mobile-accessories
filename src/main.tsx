@@ -1,7 +1,9 @@
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AnimatePresence } from 'framer-motion'
 import './index.css'
 import App from './App.tsx'
+import { AppLoader } from './components/AppLoader'
 import { loadCatalog } from './lib/catalogStore'
 
 function Root() {
@@ -16,14 +18,6 @@ function Root() {
       })
   }, [])
 
-  if (state === 'loading') {
-    return (
-      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--surface-page, #fff)' }}>
-        <div style={{ font: '800 20px/1 Archivo, sans-serif', color: '#000' }}>Raghav Mobile Accessories</div>
-      </div>
-    )
-  }
-
   if (state === 'error') {
     return (
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', textAlign: 'center', padding: 24 }}>
@@ -35,7 +29,12 @@ function Root() {
     )
   }
 
-  return <App />
+  return (
+    <>
+      {state === 'ready' && <App />}
+      <AnimatePresence>{state === 'loading' && <AppLoader key="loader" />}</AnimatePresence>
+    </>
+  )
 }
 
 createRoot(document.getElementById('root')!).render(

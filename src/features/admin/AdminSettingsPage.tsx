@@ -34,6 +34,7 @@ export function AdminSettingsPage() {
     await adminUpdateSettings({
       store_name: settings.store_name,
       area: settings.area,
+      address: settings.address,
       hours: settings.hours,
       whatsapp_number: settings.whatsapp_number,
       instagram_handle: settings.instagram_handle,
@@ -61,6 +62,7 @@ export function AdminSettingsPage() {
         <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>Store information</div>
         {field('store_name', 'Store name')}
         {field('area', 'Area')}
+        {field('address', 'Full address')}
         {field('hours', 'Hours')}
         {field('gst_number', 'GST number')}
       </section>

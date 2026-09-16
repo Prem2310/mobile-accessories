@@ -1,14 +1,16 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useSearchParams } from 'react-router-dom'
 import { Breadcrumbs } from '../../components/ds/Breadcrumbs'
 import { Button } from '../../components/ds/Button'
 import { Checkbox } from '../../components/ds/Checkbox'
 import { Icon } from '../../components/ds/Icon'
 import { Input } from '../../components/ds/Input'
+import { SearchBar } from '../../components/ds/SearchBar'
 import { SectionHeading } from '../../components/ds/SectionHeading'
 import { Select } from '../../components/ds/Select'
 import { Tag } from '../../components/ds/Tag'
-import { getBrands, getCategories, getCategoryBySlug, getCompatibilityOptions, getProducts, type ProductFilter } from '../../lib/catalog'
+import { getCategories, getCategoryBySlug, getProducts, type ProductFilter } from '../../lib/catalog'
 import { ProductGrid } from './ProductGrid'
 
 const SORT_OPTIONS = [
@@ -30,14 +32,75 @@ function toggleInList(list: string[], value: string): string[] {
   return list.includes(value) ? list.filter((v) => v !== value) : [...list, value]
 }
 
+/** Foldable filter group — Price/Rating/Compatible with/Brand each collapse independently so
+    the panel doesn't turn into one long scroll of every facet at once. */
+function FilterSection({ title, defaultOpen = true, children }: { title: string; defaultOpen?: boolean; children: ReactNode }) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div style={{ display: 'grid', gap: 'var(--sp-3)', gridTemplateColumns: 'minmax(0, 1fr)', borderTop: '1px solid var(--border-subtle)', paddingTop: 'var(--sp-3)' }}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', border: 0, background: 'none', padding: 0, cursor: 'pointer', font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-strong)' }}
+      >
+        {title}
+        <Icon name="chevron-down" size={14} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform var(--dur-base) var(--ease-out)' }} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.3, 1] }}
+            style={{ overflow: 'hidden', display: 'grid', gap: 'var(--sp-2)', gridTemplateColumns: 'minmax(0, 1fr)' }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '6px 6px 6px 12px',
+        borderRadius: 999,
+        border: '1px solid var(--border-default)',
+        background: 'var(--surface-sunken)',
+        font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)',
+        color: 'var(--text-strong)',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {label}
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Remove ${label} filter`}
+        style={{ border: 0, background: 'var(--gray-100)', borderRadius: '50%', width: 18, height: 18, padding: 0, cursor: 'pointer', display: 'grid', placeItems: 'center', color: 'var(--text-muted)' }}
+      >
+        <Icon name="x" size={11} />
+      </button>
+    </span>
+  )
+}
+
 export function ShopPage() {
   const [params, setParams] = useSearchParams()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const categorySlug = params.get('category') ?? undefined
+  const searchQuery = params.get('q') ?? ''
+  const focusSearch = params.get('focusSearch') === '1'
   const categories = getCategories()
   const category = categorySlug ? getCategoryBySlug(categorySlug) : undefined
-  const brandOptions = getBrands()
-  const compatibilityOptions = getCompatibilityOptions()
 
   const inStockOnly = params.get('instock') === '1'
   const discountedOnly = params.get('discount') === '1'
@@ -71,7 +134,16 @@ export function ShopPage() {
   )
 
   const products = getProducts(filter)
-  const activeFilterCount = [inStockOnly, discountedOnly, minPrice != null, maxPrice != null, minRating != null].filter(Boolean).length + selectedBrands.length + selectedCompat.length
+
+  // Scoped to the current category (+ search) rather than the whole catalog, so "Brand" and
+  // "Compatible with" only show up — and only list values — when they're actually meaningful
+  // for what's on screen (e.g. power banks don't have a phone-model compatibility facet).
+  const categoryProducts = useMemo(() => getProducts({ categorySlug, query: filter.query }), [categorySlug, filter.query])
+  const brandOptions = useMemo(
+    () => Array.from(new Set(categoryProducts.map((p) => p.brand).filter((b): b is string => Boolean(b)))).sort(),
+    [categoryProducts],
+  )
+  const compatibilityOptions = useMemo(() => Array.from(new Set(categoryProducts.flatMap((p) => p.compatibility ?? []))).sort(), [categoryProducts])
 
   const clearAll = () =>
     setParams((p) => {
@@ -79,53 +151,51 @@ export function ShopPage() {
       return p
     })
 
+  const appliedFilters = [
+    searchQuery && { key: 'q', label: `“${searchQuery}”`, onRemove: () => set('q', null) },
+    inStockOnly && { key: 'instock', label: 'In stock only', onRemove: () => set('instock', null) },
+    discountedOnly && { key: 'discount', label: 'On discount', onRemove: () => set('discount', null) },
+    minPrice != null && { key: 'min', label: `Min ₹${minPrice}`, onRemove: () => set('min', null) },
+    maxPrice != null && { key: 'max', label: `Max ₹${maxPrice}`, onRemove: () => set('max', null) },
+    minRating != null && { key: 'rating', label: `${minRating}★ & up`, onRemove: () => set('rating', null) },
+    ...selectedCompat.map((m) => ({ key: `model-${m}`, label: m, onRemove: () => set('model', toggleInList(selectedCompat, m).join(',') || null) })),
+    ...selectedBrands.map((b) => ({ key: `brand-${b}`, label: b, onRemove: () => set('brand', toggleInList(selectedBrands, b).join(',') || null) })),
+  ].filter(Boolean) as { key: string; label: string; onRemove: () => void }[]
+
   const filterControls = (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>Filters</div>
-        {activeFilterCount > 0 && (
-          <button onClick={clearAll} style={{ border: 0, background: 'none', cursor: 'pointer', color: 'var(--ink-900)', font: 'var(--fw-medium) var(--fs-xs)/1 var(--font-body)', textDecoration: 'underline' }}>
-            Clear all
-          </button>
-        )}
-      </div>
-
       <Checkbox label="In stock only" checked={inStockOnly} onChange={(e) => set('instock', e.target.checked ? '1' : null)} />
       <Checkbox label="On discount" checked={discountedOnly} onChange={(e) => set('discount', e.target.checked ? '1' : null)} />
 
-      <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-        <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-strong)' }}>Price</div>
-        <div style={{ display: 'flex', gap: 'var(--sp-2)' }}>
-          <Input type="number" placeholder="Min" value={minPrice ?? ''} onChange={(e) => set('min', e.target.value)} style={{ flex: 1 }} />
-          <Input type="number" placeholder="Max" value={maxPrice ?? ''} onChange={(e) => set('max', e.target.value)} style={{ flex: 1 }} />
+      <FilterSection title="Price">
+        <div style={{ display: 'flex', gap: 'var(--sp-2)', minWidth: 0 }}>
+          <Input type="number" placeholder="Min" value={minPrice ?? ''} onChange={(e) => set('min', e.target.value)} style={{ flex: 1, minWidth: 0 }} />
+          <Input type="number" placeholder="Max" value={maxPrice ?? ''} onChange={(e) => set('max', e.target.value)} style={{ flex: 1, minWidth: 0 }} />
         </div>
-      </div>
+      </FilterSection>
 
-      <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-        <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-strong)' }}>Rating</div>
+      <FilterSection title="Rating">
         <Select
           options={[{ value: '', label: 'Any rating' }, { value: '4', label: '4★ & up' }, { value: '4.5', label: '4.5★ & up' }]}
           value={minRating?.toString() ?? ''}
           onChange={(e) => set('rating', e.target.value || null)}
         />
-      </div>
+      </FilterSection>
 
       {compatibilityOptions.length > 0 && (
-        <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-          <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-strong)' }}>Compatible with</div>
+        <FilterSection title="Compatible with" defaultOpen={false}>
           {compatibilityOptions.map((m) => (
             <Checkbox key={m} label={m} checked={selectedCompat.includes(m)} onChange={() => set('model', toggleInList(selectedCompat, m).join(',') || null)} />
           ))}
-        </div>
+        </FilterSection>
       )}
 
       {brandOptions.length > 0 && (
-        <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-          <div style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-strong)' }}>Brand</div>
+        <FilterSection title="Brand" defaultOpen={false}>
           {brandOptions.map((b) => (
             <Checkbox key={b} label={b} checked={selectedBrands.includes(b)} onChange={() => set('brand', toggleInList(selectedBrands, b).join(',') || null)} />
           ))}
-        </div>
+        </FilterSection>
       )}
     </>
   )
@@ -145,6 +215,13 @@ export function ShopPage() {
         }
       />
 
+      <SearchBar
+        value={searchQuery}
+        onChange={(e) => set('q', e.target.value)}
+        autoFocus={focusSearch}
+        style={{ maxWidth: 480 }}
+      />
+
       <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap' }}>
         <Tag selected={!categorySlug} onClick={() => set('category', null)}>
           All
@@ -156,14 +233,31 @@ export function ShopPage() {
         ))}
       </div>
 
+      {appliedFilters.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--sp-2)' }}>
+          <span style={{ font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', color: 'var(--text-muted)' }}>Applied filters:</span>
+          {appliedFilters.map((f) => (
+            <FilterChip key={f.key} label={f.label} onRemove={f.onRemove} />
+          ))}
+          <button
+            type="button"
+            onClick={clearAll}
+            style={{ border: 0, background: 'none', cursor: 'pointer', color: 'var(--ink-900)', font: 'var(--fw-bold) var(--fs-xs)/1 var(--font-body)', textDecoration: 'underline' }}
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+
       <div className="md:hidden">
         <Button variant="outline" onClick={() => setMobileFiltersOpen(true)} iconLeft={<Icon name="sliders-horizontal" size={16} />}>
-          Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
+          Filters{appliedFilters.length > 0 ? ` (${appliedFilters.length})` : ''}
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]" style={{ gap: 'var(--sp-8)', alignItems: 'start' }}>
-        <aside className="hidden md:grid" style={{ gap: 'var(--sp-5)', position: 'sticky', top: 110, background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: 'var(--sp-5)' }}>
+        <aside className="hidden md:grid" style={{ gap: 'var(--sp-4)', gridTemplateColumns: 'minmax(0, 1fr)', position: 'sticky', top: 110, background: 'var(--white)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: 'var(--sp-5)', minWidth: 0 }}>
+          <div style={{ font: 'var(--fw-bold) var(--fs-sm)/1 var(--font-body)', color: 'var(--text-strong)' }}>Filters</div>
           {filterControls}
         </aside>
 
