@@ -50,7 +50,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                     ? { label: `${Math.round((1 - price / mrp) * 100)}% off` }
                     : undefined
             }
-            image={p.images[0]}
+            images={p.images}
             wishlisted={wishlisted.includes(p.id)}
             onWishlist={() => toggleWishlist(p.id)}
             onClick={() => navigate(`/products/${p.slug}`)}

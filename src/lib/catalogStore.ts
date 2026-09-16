@@ -136,13 +136,14 @@ function mapReview(row: { id: string; product_id: string; author: string; rating
 }
 
 function mapSettings(row: {
-  store_name: string; area: string; hours: string; whatsapp_number: string; instagram_handle: string
+  store_name: string; area: string; address: string; hours: string; whatsapp_number: string; instagram_handle: string
   gst_number: string | null; whatsapp_order_template: string; whatsapp_enquiry_template: string; free_delivery_threshold: number
   hero_eyebrow: string; hero_headline: string; hero_subheadline: string
 }): SiteSettings {
   return {
     storeName: row.store_name,
     area: row.area,
+    address: row.address || undefined,
     hours: row.hours,
     whatsappNumber: row.whatsapp_number,
     instagramHandle: row.instagram_handle,

@@ -22,10 +22,7 @@ export function Footer() {
     <footer style={{ background: '#000', color: '#fff', padding: '48px 28px 28px', display: 'flex', flexDirection: 'column', gap: 36 }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 22, height: 22, background: '#fff', borderRadius: '50%' }} />
-            <span style={{ fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 16 }}>RAGHAV</span>
-          </div>
+          <img src="/images/logo/logo-white.webp" alt="Raghav" style={{ height: 'clamp(20px, 5vw, 26px)', width: 'auto', maxWidth: 150, alignSelf: 'flex-start', display: 'block' }} />
           <p style={{ margin: 0, fontFamily: 'Archivo, sans-serif', fontSize: 14, lineHeight: 1.6, color: '#9c9c9c', maxWidth: '30ch' }}>
             Mobile accessories, fitted and tested in {settings.area || 'Vastral'} since 2017.
           </p>
@@ -61,8 +58,8 @@ export function Footer() {
               WhatsApp
             </a>
           )}
-          {settings.area && (
-            <a href={`https://www.google.com/maps/search/${encodeURIComponent(settings.area)}`} target="_blank" rel="noopener" style={linkStyle}>
+          {(settings.address || settings.area) && (
+            <a href={`https://www.google.com/maps/search/${encodeURIComponent(settings.address || settings.area)}`} target="_blank" rel="noopener" style={linkStyle}>
               Google Maps
             </a>
           )}
@@ -83,7 +80,7 @@ export function Footer() {
         }}
       >
         <span>© {new Date().getFullYear()} {settings.storeName}</span>
-        <span>{settings.area || 'Vastral · Ahmedabad · Gujarat'}</span>
+        <span>{settings.address || settings.area || 'Vastral · Ahmedabad · Gujarat'}</span>
       </div>
     </footer>
   )

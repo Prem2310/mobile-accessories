@@ -74,6 +74,7 @@ export interface Review {
 export interface SiteSettings {
   storeName: string
   area: string
+  address?: string
   hours: string
   whatsappNumber: string
   instagramHandle: string

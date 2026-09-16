@@ -20,9 +20,9 @@ export function WhatsAppCTA({
 }: WhatsAppCTAProps) {
   const [hover, setHover] = useState(false)
   const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
-  const pos: CSSProperties = floating
-    ? { position: 'fixed', right: 'var(--sp-6)', bottom: 'var(--sp-6)', zIndex: 50, boxShadow: 'var(--shadow-hover)' }
-    : {}
+  const pos: CSSProperties = floating ? { position: 'fixed', right: 'var(--sp-6)', bottom: 'var(--sp-6)', zIndex: 50 } : {}
+  const elevationShadow = style?.boxShadow ?? (floating ? 'var(--shadow-hover)' : undefined)
+  const boxShadow = hover ? [elevationShadow, 'inset 0 0 0 1px #000'].filter(Boolean).join(', ') : elevationShadow
   return (
     <a
       href={href}
@@ -38,14 +38,15 @@ export function WhatsAppCTA({
         height: 'var(--control-lg)',
         padding: '0 var(--sp-6)',
         borderRadius: 'var(--radius-pill)',
-        background: hover ? 'var(--whatsapp-dark)' : 'var(--whatsapp)',
-        color: 'var(--white)',
+        background: hover ? '#fff' : 'var(--whatsapp)',
+        color: hover ? '#000' : 'var(--white)',
         font: 'var(--fw-bold) var(--fs-base)/1 var(--font-body)',
         textDecoration: 'none',
         transition: 'var(--transition-control)',
         transform: hover ? 'var(--lift-hover)' : 'none',
         ...pos,
         ...style,
+        boxShadow,
       }}
     >
       <Icon name="message-circle" size={20} />

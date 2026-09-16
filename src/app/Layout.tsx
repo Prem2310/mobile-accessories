@@ -6,6 +6,7 @@ import { CartDrawer } from '../features/storefront/CartDrawer'
 import { Footer } from '../features/storefront/Footer'
 import { Header } from '../features/storefront/Header'
 import { MobileBottomNav } from '../features/storefront/MobileBottomNav'
+import { SearchDrawer } from '../features/storefront/SearchDrawer'
 import { getSiteSettings } from '../lib/catalog'
 import { buildGeneralEnquiryMessage, waLink } from '../lib/whatsapp'
 import type { SiteSettings } from '../lib/types'
@@ -35,6 +36,7 @@ export function Layout() {
       <Footer />
       <MobileBottomNav />
       <CartDrawer />
+      <SearchDrawer />
       {!hasMobileBuyBar && (
         <div className="md:hidden fixed right-4 z-40" style={{ bottom: 'calc(76px + env(safe-area-inset-bottom))' }}>
           <IconOnlyWhatsApp settings={settings} />
@@ -54,6 +56,7 @@ function IconOnlyWhatsApp({ settings }: { settings: SiteSettings }) {
       target="_blank"
       rel="noreferrer"
       aria-label="Chat on WhatsApp"
+      className="lp-whatsapp-fab"
       style={{
         width: 52,
         height: 52,
@@ -63,9 +66,10 @@ function IconOnlyWhatsApp({ settings }: { settings: SiteSettings }) {
         display: 'grid',
         placeItems: 'center',
         boxShadow: 'var(--shadow-hover)',
+        transition: 'background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out)',
       }}
     >
-      <Icon name="message-circle" size={24} color="#fff" />
+      <Icon name="message-circle" size={24} />
     </a>
   )
 }

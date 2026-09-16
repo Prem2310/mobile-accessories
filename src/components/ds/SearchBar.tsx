@@ -6,11 +6,12 @@ export interface SearchBarProps {
   value?: string
   onChange?: ChangeEventHandler<HTMLInputElement>
   onSubmit?: (value: string | undefined) => void
+  autoFocus?: boolean
   style?: CSSProperties
   className?: string
 }
 
-export function SearchBar({ placeholder = 'Search covers, glass, chargers…', value, onChange, onSubmit, style, className }: SearchBarProps) {
+export function SearchBar({ placeholder = 'Search covers, glass, chargers…', value, onChange, onSubmit, autoFocus, style, className }: SearchBarProps) {
   const [focused, setFocused] = useState(false)
   return (
     <form
@@ -38,6 +39,7 @@ export function SearchBar({ placeholder = 'Search covers, glass, chargers…', v
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        autoFocus={autoFocus}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{ flex: 1, border: 0, outline: 0, background: 'transparent', font: 'var(--type-body)', color: 'var(--text-strong)', minWidth: 0 }}
