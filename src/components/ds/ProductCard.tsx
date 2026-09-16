@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type MouseEvent, type MouseEventHandler } from 'react'
+import { useEffect, useState, type CSSProperties, type MouseEvent, type MouseEventHandler } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Badge, type BadgeTone } from './Badge'
 import { Icon } from './Icon'
@@ -71,11 +71,27 @@ export function ProductCard({
     setImageIndex((next + gallery.length) % gallery.length)
   }
 
+  // Auto-cycle through photos while hovered/focused, like a fashion-site card preview.
+  useEffect(() => {
+    if (!hover || gallery.length <= 1) return
+    const id = setInterval(() => {
+      setDirection(1)
+      setImageIndex((i) => (i + 1) % gallery.length)
+    }, 900)
+    return () => clearInterval(id)
+  }, [hover, gallery.length])
+
   return (
     <div
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseLeave={() => {
+        setHover(false)
+        setImageIndex(0)
+        setDirection(1)
+      }}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
       className={className}
       style={{ cursor: 'pointer', ...style }}
     >
