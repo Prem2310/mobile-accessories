@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Icon, type IconName } from '../../components/ds/Icon'
 import { formatINR } from '../../lib/format'
 import { getApprovedReviews, getBestsellers, getCategories, getCategoryProductCount, getNewArrivals, getProducts, getSiteSettings } from '../../lib/catalog'
-import type { Product } from '../../lib/types'
+import type { Category, Product } from '../../lib/types'
 import { buildGeneralEnquiryMessage, waLink } from '../../lib/whatsapp'
 import { useCartStore } from '../../store/cart'
 
@@ -39,11 +39,11 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 // Wraps a grid so its motion children reveal in a stagger instead of all at once.
-function RevealGrid({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+function RevealGrid({ children, style, className }: { children: React.ReactNode; style?: React.CSSProperties; className?: string }) {
   const reduce = useReducedMotion()
-  if (reduce) return <div style={style}>{children}</div>
+  if (reduce) return <div className={className} style={style}>{children}</div>
   return (
-    <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={staggerGrid} style={style}>
+    <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={staggerGrid} className={className} style={style}>
       {children}
     </motion.div>
   )
@@ -74,6 +74,24 @@ const CATEGORY_ICON_BY_SLUG: Record<string, IconName> = {
   power: 'battery-charging',
 }
 
+function CategoryTile({ category: c, reduce }: { category: Category; reduce: boolean | null }) {
+  return (
+    <MotionLink
+      to={`/shop?category=${c.slug}`}
+      variants={staggerItem}
+      whileHover={reduce ? undefined : { backgroundColor: '#000', color: '#fff', rotateY: -7, y: -6, z: 24, transition: springHover }}
+      whileTap={reduce ? undefined : tapScale}
+      style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: '28px 22px', borderRight: '1px solid #000', textDecoration: 'none', color: '#000', transformPerspective: 900 }}
+    >
+      <Icon name={c.icon ?? CATEGORY_ICON_BY_SLUG[c.slug] ?? 'package'} size={40} strokeWidth={1.4} />
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+        <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em' }}>{c.name}</span>
+        <span style={{ fontSize: 12, opacity: 0.6 }}>{getCategoryProductCount(c.id)}</span>
+      </div>
+    </MotionLink>
+  )
+}
+
 export function HomePage() {
   const settings = getSiteSettings()
   const categories = getCategories()
@@ -98,22 +116,16 @@ export function HomePage() {
           </Link>
         </div>
         <RevealGrid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', borderTop: '1px solid #000' }}>
-          {categories.slice(0, 8).map((c) => (
-            <MotionLink
-              key={c.id}
-              to={`/shop?category=${c.slug}`}
-              variants={staggerItem}
-              whileHover={reduce ? undefined : { backgroundColor: '#000', color: '#fff', rotateY: -7, y: -6, z: 24, transition: springHover }}
-              whileTap={reduce ? undefined : tapScale}
-              style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: '28px 22px', borderRight: '1px solid #000', textDecoration: 'none', color: '#000', transformPerspective: 900 }}
-            >
-              <Icon name={c.icon ?? CATEGORY_ICON_BY_SLUG[c.slug] ?? 'package'} size={40} strokeWidth={1.4} />
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
-                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em' }}>{c.name}</span>
-                <span style={{ fontSize: 12, opacity: 0.6 }}>{getCategoryProductCount(c.id)}</span>
-              </div>
-            </MotionLink>
+          {categories.slice(0, 4).map((c) => (
+            <CategoryTile key={c.id} category={c} reduce={reduce} />
           ))}
+          {categories.length > 4 && (
+            <div className="hidden sm:contents">
+              {categories.slice(4, 8).map((c) => (
+                <CategoryTile key={c.id} category={c} reduce={reduce} />
+              ))}
+            </div>
+          )}
         </RevealGrid>
       </section>
 
@@ -296,7 +308,10 @@ function ProductSection({
           {meta}
         </Link>
       </div>
-      <RevealGrid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', borderTop: '1px solid #000' }}>
+      <RevealGrid
+        className="grid grid-cols-2 sm:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]"
+        style={{ borderTop: '1px solid #000' }}
+      >
         {products.map((p) => (
           <motion.article
             key={p.id}
