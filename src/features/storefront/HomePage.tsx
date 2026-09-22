@@ -391,12 +391,12 @@ function ProductSection({
 }
 
 const INSTAGRAM_PHOTOS = [
-  '/images/instagram/post1.jpg',
-  '/images/instagram/post2.jpg',
-  '/images/instagram/post3.jpg',
-  '/images/instagram/post4.jpg',
-  '/images/instagram/post5.jpg',
-  '/images/instagram/post6.jpg',
+  '/images/instagram/post1.webp',
+  '/images/instagram/post2.webp',
+  '/images/instagram/post3.webp',
+  '/images/instagram/post4.webp',
+  '/images/instagram/post5.webp',
+  '/images/instagram/post6.webp',
 ]
 
 function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings> }) {
@@ -461,7 +461,7 @@ function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ flex: 'none', width: 54, height: 54, borderRadius: '50%', padding: 2, background: 'linear-gradient(140deg,#fff,#8a8a8a 55%,#2a2a2a)' }}>
                 <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
-                  <img src="/images/logo/logo-white.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  <img src="/images/logo/logo-white.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
               </div>
               <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
