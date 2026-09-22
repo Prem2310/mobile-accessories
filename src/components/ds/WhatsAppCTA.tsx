@@ -11,8 +11,8 @@ export interface WhatsAppCTAProps {
 }
 
 export function WhatsAppCTA({
-  phone = '919999999999',
-  message = 'Hi Raghav Mobile Accessories, I want to order:',
+  phone = '918160744099',
+  message = 'Hi iStuff - The Apple Accessories Store, I want to order:',
   label = 'Order on WhatsApp',
   floating = false,
   style,

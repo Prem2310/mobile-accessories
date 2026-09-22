@@ -138,7 +138,9 @@ export function getReviewsForProduct(productId: string): Review[] {
 }
 
 export function getApprovedReviews(): Review[] {
-  return reviews.filter((r) => r.approved)
+  // Demo rebrand: the seeded reviews are real Raghav customers naming that shop by name —
+  // wrong for a pitch under a different brand, so those are hidden here rather than in the DB.
+  return reviews.filter((r) => r.approved && !/raghav/i.test(r.comment) && !/raghav/i.test(r.author))
 }
 
 export function getActiveOffers(): Offer[] {

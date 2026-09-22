@@ -40,13 +40,13 @@ export function AdminLogin({ needsBootstrap }: { needsBootstrap: boolean }) {
       <form onSubmit={submit} style={{ width: '100%', maxWidth: 380, background: 'var(--white)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-card)', padding: 'var(--sp-8)', display: 'grid', gap: 'var(--sp-4)' }}>
         <div>
           <div style={{ font: '800 22px/1 var(--font-display)', color: 'var(--navy-800)' }}>
-            RAGHAV Admin
+            ISTUFF Admin
           </div>
           <p style={{ marginTop: 8, color: 'var(--text-muted)' }}>
             {needsBootstrap ? 'No admin account exists yet — create the owner account.' : 'Sign in to manage the store.'}
           </p>
         </div>
-        <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="owner@raghavmobile.in" />
+        <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="owner@istuff.in" />
         <Input label="Password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" />
         {error && <p style={{ color: 'var(--red-600)', font: 'var(--fw-medium) var(--fs-sm)/1.4 var(--font-body)' }}>{error}</p>}
         <Button type="submit" disabled={busy} fullWidth>

@@ -34,7 +34,7 @@ export function AdminLayout() {
       <aside style={{ width: 220, flex: '0 0 auto', background: 'var(--navy-900)', color: '#fff', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
         <div style={{ padding: 'var(--sp-5)' }}>
           <div style={{ font: '800 22px/1 var(--font-display)' }}>
-            RAGHAV
+            ISTUFF
           </div>
           <div style={{ font: 'var(--fw-bold) 10px/1 var(--font-body)', letterSpacing: 'var(--ls-caps)', color: 'var(--navy-200)', textTransform: 'uppercase', marginTop: 4 }}>Admin</div>
         </div>

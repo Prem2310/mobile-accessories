@@ -26,8 +26,8 @@ export function AppLoader() {
       }}
     >
       <motion.img
-        src="/images/logo/logo-black.webp"
-        alt="Raghav"
+        src="/images/logo/logo-black.svg"
+        alt="iStuff"
         initial={{ opacity: 0, scale: 0.9, y: 8 }}
         animate={reduce ? { opacity: 1, scale: 1, y: 0 } : { opacity: 1, scale: [0.9, 1.04, 1], y: 0 }}
         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}

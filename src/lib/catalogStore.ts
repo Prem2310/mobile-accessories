@@ -12,12 +12,24 @@ export let products: Product[] = []
 export let offers: Offer[] = []
 export let banners: Banner[] = []
 export let reviews: Review[] = []
-export let siteSettings: SiteSettings = {
-  storeName: 'Raghav Mobile Accessories',
-  area: '',
-  hours: '',
-  whatsappNumber: '',
+
+/**
+ * This is a rebrand demo for a prospective shop: the catalog (products/categories/reviews)
+ * still comes from the shared Supabase project, but the storefront's identity fields must
+ * show the new shop, not whatever the live `site_settings` row has. Forced here so it holds
+ * regardless of what the DB returns.
+ */
+const DEMO_BUSINESS_IDENTITY = {
+  storeName: 'iStuff - The Apple Accessories Store',
+  area: 'Thaltej, Ahmedabad',
+  address: 'FF-22, First Floor, Maple Tree, Near Surdhara Circle, Thaltej, Ahmedabad, Gujarat 380052',
+  hours: '10 AM – 9 PM, all days',
+  whatsappNumber: '918160744099',
   instagramHandle: '',
+}
+
+export let siteSettings: SiteSettings = {
+  ...DEMO_BUSINESS_IDENTITY,
   whatsappOrderTemplate: '',
   whatsappEnquiryTemplate: '',
   freeDeliveryThreshold: 0,
@@ -181,7 +193,7 @@ export async function loadCatalog(): Promise<void> {
   offers = offersRes.data.map(mapOffer)
   banners = bannersRes.data.map(mapBanner)
   reviews = reviewsRes.data.map(mapReview)
-  siteSettings = mapSettings(settingsRes.data)
+  siteSettings = { ...mapSettings(settingsRes.data), ...DEMO_BUSINESS_IDENTITY }
   loaded = true
 }
 

@@ -22,9 +22,9 @@ export function Footer() {
     <footer style={{ background: '#000', color: '#fff', padding: '48px 28px 28px', display: 'flex', flexDirection: 'column', gap: 36 }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <img src="/images/logo/logo-white.webp" alt="Raghav" style={{ height: 'clamp(20px, 5vw, 26px)', width: 'auto', maxWidth: 150, alignSelf: 'flex-start', display: 'block' }} />
+          <img src="/images/logo/logo-white.svg" alt="iStuff" style={{ height: 'clamp(20px, 5vw, 26px)', width: 'auto', maxWidth: 150, alignSelf: 'flex-start', display: 'block' }} />
           <p style={{ margin: 0, fontFamily: 'Archivo, sans-serif', fontSize: 14, lineHeight: 1.6, color: '#9c9c9c', maxWidth: '30ch' }}>
-            Mobile accessories, fitted and tested in {settings.area || 'Vastral'} since 2017.
+            Apple accessories, fitted and tested in {settings.area || 'Thaltej'}.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export function Footer() {
         }}
       >
         <span>© {new Date().getFullYear()} {settings.storeName}</span>
-        <span>{settings.address || settings.area || 'Vastral · Ahmedabad · Gujarat'}</span>
+        <span>{settings.address || settings.area || 'Thaltej · Ahmedabad · Gujarat'}</span>
       </div>
     </footer>
   )

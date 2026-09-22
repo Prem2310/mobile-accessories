@@ -155,9 +155,9 @@ export function HomePage() {
 
 function Hero({ settings, productCount }: { settings: ReturnType<typeof getSiteSettings>; productCount: number }) {
   const stats = [
-    { value: '9+', label: 'Years in Vastral' },
+    { value: '5+', label: 'Years in Thaltej' },
     { value: `${productCount}+`, label: 'Products stocked' },
-    { value: '4.8', label: 'Google rating' },
+    { value: '5.0', label: 'Customer rating' },
     { value: '7 days', label: 'No-fuss replacement' },
   ]
   return (
@@ -178,7 +178,7 @@ function Hero({ settings, productCount }: { settings: ReturnType<typeof getSiteS
           color: '#666',
         }}
       >
-        <span>Estd. 2017 · {settings.area || 'Vastral, Ahmedabad'}</span>
+        <span>Apple accessories specialist · {settings.area || 'Thaltej, Ahmedabad'}</span>
         <span>Free fitting · Same-day pickup</span>
       </div>
 
@@ -197,7 +197,7 @@ function Hero({ settings, productCount }: { settings: ReturnType<typeof getSiteS
             textTransform: 'uppercase',
           }}
         >
-          Mobile<br />Accessories
+          Apple<br />Accessories
         </motion.h1>
       </div>
 
@@ -208,7 +208,7 @@ function Hero({ settings, productCount }: { settings: ReturnType<typeof getSiteS
           transition={{ duration: 0.7, delay: 0.15, ease: [0.2, 0.7, 0.2, 1] }}
           style={{ margin: 0, maxWidth: '46ch', fontSize: 17, lineHeight: 1.55, color: '#444' }}
         >
-          Cases, tempered glass, fast chargers, earbuds and power banks — hand-picked, tested on the counter, and priced like a neighbourhood shop should.
+          Cases, tempered glass, fast chargers, AirPods and cables — genuine picks, tested on the counter, and priced like a neighbourhood Apple store should.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -409,7 +409,7 @@ function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings
         <Reveal>
           <h2 style={{ margin: 0, color: '#fff', fontFamily: "'Archivo Black', Archivo, sans-serif", fontSize: 'clamp(28px,4.4vw,54px)', letterSpacing: '-0.035em', textTransform: 'uppercase' }}>Two taps to us</h2>
         </Reveal>
-        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8d8d8d' }}>{settings.area || 'Vastral, Ahmedabad'} · Open all days</span>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8d8d8d' }}>{settings.area || 'Thaltej, Ahmedabad'} · Open all days</span>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', borderTop: '1px solid rgba(255,255,255,0.18)' }}>
@@ -465,7 +465,7 @@ function ContactBand({ settings }: { settings: ReturnType<typeof getSiteSettings
                 </div>
               </div>
               <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em', overflowWrap: 'anywhere' }}>{settings.instagramHandle || '@raghav_mobile_accessories'}</span>
+                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em', overflowWrap: 'anywhere' }}>{settings.instagramHandle || '@istuff.ahmedabad'}</span>
                 <span style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8d8d8d' }}>New stock · fitting reels · offers</span>
               </div>
               <Icon name="instagram" size={24} color="#fff" style={{ marginLeft: 'auto' }} />

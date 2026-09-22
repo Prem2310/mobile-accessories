@@ -44,7 +44,7 @@ export function Header() {
       }}
     >
       <Link to="/" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto', textDecoration: 'none' }}>
-        <img src="/images/logo/logo-black.webp" alt="Raghav" style={{ height: 'clamp(24px, 6vw, 32px)', width: 'auto', maxWidth: 160, display: 'block' }} />
+        <img src="/images/logo/logo-black.svg" alt="iStuff" style={{ height: 'clamp(24px, 6vw, 32px)', width: 'auto', maxWidth: 160, display: 'block' }} />
       </Link>
 
       <nav className="hidden lg:flex" style={{ gap: 28 }}>
